@@ -11,13 +11,14 @@ import {
   List,
   DatePicker,
   Dropdown,
-  Menu,
+  Menu, Table,
 } from 'antd';
 import { connect } from 'dva';
-import { Chart, Tooltip, Geom, Axis } from 'bizcharts';
+import { Chart, Tooltip, Geom, Axis, Coord } from 'bizcharts';
 import moment from 'moment';
 import { RangePickerValue } from 'antd/lib/date-picker/interface';
 import {
+  IAnalysisOnlineSearchTableType,
   IAnalysisOnlineSearchType,
   IAnalysisPayNumsType,
   IAnalysisPercentType,
@@ -29,6 +30,7 @@ import {
 } from '@/models/dashboard/analysis';
 import { ConnectState } from '@/models/connect';
 import styles from './analysis.less';
+import DataSet from "@antv/data-set";
 
 interface IAnalysisProps {
   dispatch: Dispatch<AnyAction>;
@@ -51,9 +53,10 @@ interface IAnalysisInitState {
   key: string;
   chartSaleAndVisitTitle?: string;
   listSaleAndVisitTitle?: string;
-  // rangeDate?: [moment.Moment, moment.Moment],
   rangeDate?: RangePickerValue;
   selectedDate?: string;
+  currentPage?: number;
+  pageSize?: number;
 }
 
 const { RangePicker } = DatePicker;
@@ -77,6 +80,8 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
       listSaleAndVisitTitle: '门店销售额排名',
       rangeDate: [moment(), moment()],
       selectedDate: 'day',
+      currentPage: 1,
+      pageSize: 5,
     };
   }
 
@@ -121,6 +126,8 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
     const { dispatch } = this.props;
     await dispatch({
       type: 'analysis/getOnlineSearch',
+      currentPage: this.state.currentPage,
+      pageSize: this.state.pageSize,
     });
   };
 
@@ -177,6 +184,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
   };
 
   render() {
+    const { DataView } = DataSet;
     const {
       loading,
       visits,
@@ -199,7 +207,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
     console.log('onlineSearch', onlineSearch);
     console.log('salesRatio', salesRatio);
     console.log('ratioChartData', ratioChartData);
-    const payNumbersScale = {
+    const dateScale = {
       date: {
         type: 'cat',
       },
@@ -333,6 +341,40 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
         <Icon type="ellipsis"/>
       </Dropdown>
     );
+    const columns = [
+      {
+        title: '排名',
+        dataIndex: 'id',
+        key: 'id',
+      },
+      {
+        title: '搜索关键字',
+        dataIndex: 'keyword',
+        key: 'keyword',
+        render: (text: string, record: IAnalysisOnlineSearchTableType, index: number) =>
+          <a>{`${text}-${record.id}`}</a>,
+      },
+      {
+        title: '用户数',
+        dataIndex: 'users',
+        key: 'users',
+      },
+      {
+        title: '周涨幅',
+        dataIndex: 'weekGain',
+        key: 'weekGain',
+        render: (text: number, record: IAnalysisOnlineSearchTableType, index: number) =>
+          (text >= 0 ? (<span>{`${text}%`} <Icon type="caret-up" style={{ color: 'red' }}/></span>) :
+            (<span>{`${Math.abs(text)}%`}<Icon type="caret-down" style={{ color: 'green' }}/></span>)),
+      },
+    ];
+    const dv = new DataView();
+    dv.source(ratioChartData).transform({
+      type: 'percent',
+      field: 'value',
+      dimension: 'type',
+      as: 'value',
+    });
     return (
       <div>
         <Row gutter={16} style={{ paddingTop: 20 }}>
@@ -432,7 +474,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                   <Chart
                     height={40}
                     data={payNumbers}
-                    scale={payNumbersScale}
+                    scale={dateScale}
                     forceFit
                     padding="auto"
                   >
@@ -510,20 +552,15 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
         </Row>
         <Row gutter={16} style={{ paddingTop: 20 }}>
           <Col span={12}>
-            <Card title="线上热门搜索" extra={onlineSearchExtra}>
+            <Card title={onlineSearch.title} extra={onlineSearchExtra}>
               <Row>
                 <Col
                   span={12}
-                  style={{
-                    paddingLeft: 34,
-                    paddingRight: 34,
-                    marginBottom: 24,
-                  }}
                 >
                   <Row>
                     <Col span={16}>
                       <span style={{ color: 'rgba(0,0,0,.45)' }}>
-                        搜索用户数
+                        {onlineSearch.searchUser}
                       </span>
                     </Col>
                     <Col span={6}>
@@ -539,29 +576,54 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                   >
                     <Col span={12}>
                       <div style={{ height: 34 }}>
-                        <span style={{ fontSize: 24 }}>12,321</span>
+                        <span style={{ fontSize: 24 }}>{onlineSearch.searchUsers}</span>
                       </div>
                     </Col>
                     <Col span={12}>
                       <div style={{ height: 34, lineHeight: 2.5 }}>
-                        <span style={{ fontSize: 16 }}>17.1</span>
+                        <span style={{ fontSize: 16 }}>{onlineSearch.userRatio}</span>
                         <Icon type="caret-up" style={{ color: 'red' }}/>
                       </div>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={20}>
+                      <Chart height={40} data={onlineSearch.users} forceFit padding="auto">
+                        <Tooltip
+                          showTitle={false}
+                          crosshairs={{
+                            type: 'rect',
+                          }}
+                        />
+                        <Geom type="area"
+                              position="date*value"
+                              tooltip={[
+                                'date*value',
+                                (date, value) => ({
+                                  name: date,
+                                  value,
+                                }),
+                              ]}/>
+                        <Geom type="line"
+                              position="date*value"
+                              tooltip={[
+                                'date*value',
+                                (date, value) => ({
+                                  name: date,
+                                  value,
+                                }),
+                              ]}/>
+                      </Chart>
                     </Col>
                   </Row>
                 </Col>
                 <Col
                   span={12}
-                  style={{
-                    paddingLeft: 34,
-                    paddingRight: 34,
-                    marginBottom: 24,
-                  }}
                 >
                   <Row>
                     <Col span={16}>
                       <span style={{ color: 'rgba(0,0,0,.45)' }}>
-                        人均搜索次数
+                        {onlineSearch.perSearch}
                       </span>
                     </Col>
                     <Col span={6}>
@@ -576,16 +638,86 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                     align="top"
                   >
                     <Col span={12}>
-                      <span style={{ fontSize: 24 }}>2.7</span>
+                      <span style={{ fontSize: 24 }}>{onlineSearch.searchNum}</span>
                     </Col>
                     <Col span={12}>
                       <div style={{ height: 34, lineHeight: 2.5 }}>
-                        <span style={{ fontSize: 16 }}>26.2</span>
+                        <span style={{ fontSize: 16 }}>
+                          {onlineSearch.searchRatio && Math.abs(onlineSearch.searchRatio)}
+                        </span>
                         <Icon type="caret-down" style={{ color: 'green' }}/>
                       </div>
                     </Col>
                   </Row>
+                  <Row>
+                    <Col span={20}>
+                      <Chart height={40} data={onlineSearch.search} forceFit padding="auto">
+                        <Tooltip
+                          showTitle={false}
+                          crosshairs={{
+                            type: 'rect',
+                          }}
+                        />
+                        <Geom type="area"
+                              position="date*value"
+                              tooltip={[
+                                'date*value',
+                                (date, value) => ({
+                                  name: date,
+                                  value,
+                                }),
+                              ]}/>
+                        <Geom type="line"
+                              position="date*value"
+                              tooltip={[
+                                'date*value',
+                                (date, value) => ({
+                                  name: date,
+                                  value,
+                                }),
+                              ]}/>
+                      </Chart>
+                    </Col>
+                  </Row>
                 </Col>
+              </Row>
+              <div style={{ marginTop: 20 }}>
+                <Table rowKey={(record: IAnalysisOnlineSearchTableType, index: number) => `${record.id}`}
+                       columns={columns}
+                       dataSource={onlineSearch.tables}
+                       size="small"
+                       pagination={{ position: 'bottom', defaultPageSize: 5, size: 'small' }}/>
+              </div>
+            </Card>
+          </Col>
+          <Col span={12}>
+            <Card title={salesRatio.title} extra={onlineSearchExtra}>
+              <Row type="flex" align="top">
+                <Col span={2}>{salesRatio.chartTitle}</Col>
+              </Row>
+              <Row style={{ marginTop: 40 }}>
+                <Col span={10}>
+                  <Chart height={180} data={dv} forceFit padding="auto">
+                    <Tooltip showTitle={false}
+                    />
+                    <Coord type="theta" radius={0.75} innerRadius={0.6}/>
+                    <Axis name="value"/>
+                    <Geom type="intervalStack"
+                          position="value"
+                          color="type"
+                          tooltip={['type*value', (type, value) => ({
+                            name: type,
+                            value: `${Math.floor(value * 10000) / 100}%`,
+                            // value,
+                          })]}
+                          style={{
+                            lineWidth: 5,
+                            stroke: '#fff',
+                          }}
+                    />
+                  </Chart>
+                </Col>
+                <Col span={14}></Col>
               </Row>
             </Card>
           </Col>

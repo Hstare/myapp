@@ -2,63 +2,6 @@
 import mockjs from 'mockjs';
 
 export default {
-  // 'GET /analysis/visits': [
-  //   {
-  //     year: '1996',
-  //     value: 3405,
-  //   },
-  //   {
-  //     year: '1997',
-  //     value: 3198,
-  //   },
-  //   {
-  //     year: '1998',
-  //     value: 3233,
-  //   },
-  //   {
-  //     year: '1999',
-  //     value: 3204,
-  //   },
-  //   {
-  //     year: '2000',
-  //     value: 3323,
-  //   },
-  //   {
-  //     year: '2001',
-  //     value: 2323,
-  //   },
-  // ],
-
-  // 'GET /analysis/payNumber': [
-  //   {
-  //     date: '2019-11-12',
-  //     value: 6,
-  //   },
-  //   {
-  //     date: '2019-11-13',
-  //     value: 3,
-  //   },
-  //   {
-  //     date: '2019-11-14',
-  //     value: 4,
-  //   },
-  //   {
-  //     date: '2019-11-15',
-  //     value: 9,
-  //   },
-  //   {
-  //     date: '2019-11-16',
-  //     value: 2,
-  //   },
-  //   {
-  //     date: '2019-11-17',
-  //     value: 4,
-  //   },
-  //   {
-  //     date: '2019-11-18',
-  //     value: 11,
-  //   },
-  // ],
   'GET /analysis/visits': mockjs.mock({
     'visits|8': [{ year: '@date()', 'value|2000-5000': 5000 }],
   }),
@@ -185,13 +128,17 @@ export default {
   }),
   'GET /analysis/salesRatioChartDate': mockjs.mock({
     data: {
-      'ratioChartData|5-6': [
-        { type: '家用电器', value: 4544 },
-        { type: '食用酒水', value: 3321 },
-        { type: '个护健康', value: 3116 },
-        { type: '服饰箱包', value: 2341 },
-        { type: '母婴产品', value: 1223 },
-        { type: '其他', value: 1231 },
+      // 'ratioChartData|5-6': [
+      //   { 'type|1': ['家用电器', '食用酒水', '个护健康', '服饰箱包', '母婴产品', '其他'], 'value|1000-5000': 2000 },
+      // ],
+      ratioChartData: [
+        { type: '家用电器', 'value|1000-5000': 2000 },
+        { type: '食用酒水', 'value|1000-5000': 2000 },
+        { type: '个护健康', 'value|1000-5000': 2000 },
+        { type: '服饰箱包', 'value|1000-5000': 2000 },
+        { type: '母婴产品', 'value|1000-5000': 2000 },
+        { type: '其他\'', 'value|1000-5000': 2000 },
+        // { 'type|1': ['家用电器', '食用酒水', '个护健康', '服饰箱包', '母婴产品', '其他'], 'value|1000-5000': 2000 },
       ],
     },
   }),

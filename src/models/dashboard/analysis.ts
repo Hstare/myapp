@@ -31,6 +31,13 @@ export interface IAnalysisSalesType {
   rank?: string;
 }
 
+export interface IAnalysisOnlineSearchTableType {
+  id: number,
+  keyword: string,
+  users: number,
+  weekGain: number,
+}
+
 export interface IAnalysisOnlineSearchType {
   title?: string;
   searchUser?: string;
@@ -41,7 +48,7 @@ export interface IAnalysisOnlineSearchType {
   searchNum?: string;
   searchRatio?: number;
   search?: [{ date: string; value: number }];
-  tables?: [{ id: number; keyword: string; users: number; weekGain: number }];
+  tables?: IAnalysisOnlineSearchTableType[];
 }
 
 export interface IAnalysisSalesRatioType {
@@ -125,18 +132,20 @@ const AnalysisModel: IAnalysisModelType = {
         payload: response.sales,
       });
     },
-    *getOnlineSearch(_, { call, put }) {
-      const response = yield call(() => getOnlineSearch());
+    *getOnlineSearch({ currentPage, pageSize }, { call, put }) {
+      const response = yield call(() => getOnlineSearch(currentPage, pageSize));
+      console.log('getOnlineSearch', response);
       yield put({
         type: 'saveOnlineSearch',
-        payload: response.sales,
+        payload: response,
       });
     },
     *getSalesRatioChartDate(_, { call, put }) {
       const response = yield call(() => getSalesRatioChartDate());
+      console.log('getSalesRatioChartDate', response);
       yield put({
         type: 'saveSalesRatioChartDate',
-        payload: response.sales,
+        payload: response,
       });
     },
   },
@@ -148,7 +157,6 @@ const AnalysisModel: IAnalysisModelType = {
       };
     },
     savePayNumbers(state, { payload }) {
-      console.log('savePayNumbers payload', payload);
       return {
         ...state,
         payNumbers: payload || [],
@@ -176,7 +184,7 @@ const AnalysisModel: IAnalysisModelType = {
     saveSalesRatioChartDate(state, action) {
       return {
         ...state,
-        ratioChartData: action.payload.data.salesRatio,
+        ratioChartData: action.payload.data.ratioChartData,
       };
     },
   },
