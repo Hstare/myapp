@@ -1,13 +1,13 @@
-import { Effect } from "dva";
-import { Reducer } from "redux";
+import { Effect } from 'dva';
+import { Reducer } from 'redux';
 import {
   getOnlineSearch,
   getPayNumber,
   getPercent,
   getSales,
   getSalesRatioChartDate,
-  getVisits
-} from "@/services/dashboard/analysis";
+  getVisits,
+} from '@/services/dashboard/analysis';
 
 export interface IAnalysisVisitsType {
   year?: string;
@@ -86,7 +86,7 @@ export interface IAnalysisModelType {
 }
 
 const AnalysisModel: IAnalysisModelType = {
-  namespace: "analysis",
+  namespace: 'analysis',
   state: {
     visits: [],
     payNumbers: [],
@@ -94,91 +94,91 @@ const AnalysisModel: IAnalysisModelType = {
     sales: [],
     onlineSearch: {},
     salesRatio: {},
-    ratioChartData: []
+    ratioChartData: [],
   },
   effects: {
     *getVisits(_, { call, put }) {
-      const response = yield call(() => getVisits(""));
+      const response = yield call(() => getVisits(''));
       yield put({
-        type: "saveVisits",
-        payload: response.visits
+        type: 'saveVisits',
+        payload: response.visits,
       });
     },
     *getPayNumbers(_, { call, put }) {
       const response = yield call(() => getPayNumber());
       yield put({
-        type: "savePayNumbers",
-        payload: response.payNumber
+        type: 'savePayNumbers',
+        payload: response.payNumber,
       });
     },
     *getPercent(_, { call, put }) {
       const response = yield call(() => getPercent());
       yield put({
-        type: "savePercent",
-        payload: response
+        type: 'savePercent',
+        payload: response,
       });
     },
     *getSales(_, { call, put }) {
       const response = yield call(() => getSales());
       yield put({
-        type: "saveSales",
-        payload: response.sales
+        type: 'saveSales',
+        payload: response.sales,
       });
     },
     *getOnlineSearch(_, { call, put }) {
       const response = yield call(() => getOnlineSearch());
       yield put({
-        type: "saveOnlineSearch",
-        payload: response.sales
+        type: 'saveOnlineSearch',
+        payload: response.sales,
       });
     },
     *getSalesRatioChartDate(_, { call, put }) {
       const response = yield call(() => getSalesRatioChartDate());
       yield put({
-        type: "saveSalesRatioChartDate",
-        payload: response.sales
+        type: 'saveSalesRatioChartDate',
+        payload: response.sales,
       });
-    }
+    },
   },
   reducers: {
     saveVisits(state, { payload }) {
       return {
         ...state,
-        visits: payload || []
+        visits: payload || [],
       };
     },
     savePayNumbers(state, { payload }) {
-      console.log("savePayNumbers payload", payload);
+      console.log('savePayNumbers payload', payload);
       return {
         ...state,
-        payNumbers: payload || []
+        payNumbers: payload || [],
       };
     },
     savePercent(state, { payload }) {
       return {
         ...state,
-        percent: payload || {}
+        percent: payload || {},
       };
     },
     saveSales(state, action) {
       return {
         ...state,
-        sales: action.payload || []
+        sales: action.payload || [],
       };
     },
     saveOnlineSearch(state, action) {
       return {
         ...state,
         onlineSearch: action.payload.data.onlineSearch,
-        salesRatio: action.payload.data.salesRatio
+        salesRatio: action.payload.data.salesRatio,
       };
     },
     saveSalesRatioChartDate(state, action) {
       return {
         ...state,
-        ratioChartData: action.payload.data.salesRatio
+        ratioChartData: action.payload.data.salesRatio,
       };
-    }
-  }
+    },
+  },
 };
 export default AnalysisModel;

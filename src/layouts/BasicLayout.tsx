@@ -8,20 +8,20 @@ import ProLayout, {
   MenuDataItem,
   BasicLayoutProps as ProLayoutProps,
   Settings,
-  DefaultFooter
-} from "@ant-design/pro-layout";
-import React, { useEffect } from "react";
-import Link from "umi/link";
-import { Dispatch } from "redux";
-import { connect } from "dva";
-import { Icon } from "antd";
-import { formatMessage } from "umi-plugin-react/locale";
+  DefaultFooter,
+} from '@ant-design/pro-layout';
+import React, { useEffect } from 'react';
+import Link from 'umi/link';
+import { Dispatch } from 'redux';
+import { connect } from 'dva';
+import { Icon } from 'antd';
+import { formatMessage } from 'umi-plugin-react/locale';
 
-import Authorized from "@/utils/Authorized";
-import RightContent from "@/components/GlobalHeader/RightContent";
-import { ConnectState } from "@/models/connect";
-import { isAntDesignPro } from "@/utils/utils";
-import logo from "../assets/logo.svg";
+import Authorized from '@/utils/Authorized';
+import RightContent from '@/components/GlobalHeader/RightContent';
+import { ConnectState } from '@/models/connect';
+import { isAntDesignPro } from '@/utils/utils';
+import logo from '../assets/logo.svg';
 
 export interface BasicLayoutProps extends ProLayoutProps {
   breadcrumbNameMap: {
@@ -30,7 +30,8 @@ export interface BasicLayoutProps extends ProLayoutProps {
   settings: Settings;
   dispatch: Dispatch;
 }
-export type BasicLayoutContext = { [K in "location"]: BasicLayoutProps[K] } & {
+
+export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
   breadcrumbNameMap: {
     [path: string]: MenuDataItem;
   };
@@ -43,7 +44,7 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
   menuList.map(item => {
     const localItem = {
       ...item,
-      children: item.children ? menuDataRender(item.children) : []
+      children: item.children ? menuDataRender(item.children) : [],
     };
     return Authorized.check(item.authority, localItem, null) as MenuDataItem;
   });
@@ -53,28 +54,28 @@ const defaultFooterDom = (
     copyright="2019 蚂蚁金服体验技术部出品"
     links={[
       {
-        key: "Ant Design Pro",
-        title: "Ant Design Pro",
-        href: "https://pro.ant.design",
-        blankTarget: true
+        key: 'Ant Design Pro',
+        title: 'Ant Design Pro',
+        href: 'https://pro.ant.design',
+        blankTarget: true,
       },
       {
-        key: "github",
-        title: <Icon type="github" />,
-        href: "https://github.com/ant-design/ant-design-pro",
-        blankTarget: true
+        key: 'github',
+        title: <Icon type="github"/>,
+        href: 'https://github.com/ant-design/ant-design-pro',
+        blankTarget: true,
       },
       {
-        key: "Ant Design",
-        title: "Ant Design",
-        href: "https://ant.design",
-        blankTarget: true
-      }
+        key: 'Ant Design',
+        title: 'Ant Design',
+        href: 'https://ant.design',
+        blankTarget: true,
+      },
     ]}
   />
 );
 
-const footerRender: BasicLayoutProps["footerRender"] = () => {
+const footerRender: BasicLayoutProps['footerRender'] = () => {
   if (!isAntDesignPro()) {
     return defaultFooterDom;
   }
@@ -83,8 +84,8 @@ const footerRender: BasicLayoutProps["footerRender"] = () => {
       {defaultFooterDom}
       <div
         style={{
-          padding: "0px 24px 24px",
-          textAlign: "center"
+          padding: '0px 24px 24px',
+          textAlign: 'center',
         }}
       >
         <a
@@ -112,10 +113,10 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   useEffect(() => {
     if (dispatch) {
       dispatch({
-        type: "user/fetchCurrent"
+        type: 'user/fetchCurrent',
       });
       dispatch({
-        type: "settings/getSetting"
+        type: 'settings/getSetting',
       });
     }
   }, []);
@@ -126,8 +127,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   const handleMenuCollapse = (payload: boolean): void => {
     if (dispatch) {
       dispatch({
-        type: "global/changeLayoutCollapsed",
-        payload
+        type: 'global/changeLayoutCollapsed',
+        payload,
       });
     }
   };
@@ -144,18 +145,18 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       }}
       breadcrumbRender={(routers = []) => [
         {
-          path: "/",
+          path: '/',
           breadcrumbName: formatMessage({
-            id: "menu.home",
-            defaultMessage: "Home"
-          })
+            id: 'menu.home',
+            defaultMessage: 'Home',
+          }),
         },
-        ...routers
+        ...routers,
       ]}
       itemRender={(route, params, routes, paths) => {
         const first = routes.indexOf(route) === 0;
         return first ? (
-          <Link to={paths.join("/")}>{route.breadcrumbName}</Link>
+          <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
         ) : (
           <span>{route.breadcrumbName}</span>
         );
@@ -174,5 +175,5 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
 
 export default connect(({ global, settings }: ConnectState) => ({
   collapsed: global.collapsed,
-  settings
+  settings,
 }))(BasicLayout);

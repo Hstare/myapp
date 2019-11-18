@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { AnyAction, Dispatch } from "redux";
+import React, { Component } from 'react';
+import { AnyAction, Dispatch } from 'redux';
 import {
   Card,
   Col,
@@ -11,9 +11,12 @@ import {
   List,
   DatePicker,
   Dropdown,
-  Menu
-} from "antd";
-import { connect } from "dva";
+  Menu,
+} from 'antd';
+import { connect } from 'dva';
+import { Chart, Tooltip, Geom, Axis } from 'bizcharts';
+import moment from 'moment';
+import { RangePickerValue } from 'antd/lib/date-picker/interface';
 import {
   IAnalysisOnlineSearchType,
   IAnalysisPayNumsType,
@@ -22,13 +25,10 @@ import {
   IAnalysisSalesRatioType,
   IAnalysisSalesType,
   IAnalysisStateType,
-  IAnalysisVisitsType
-} from "@/models/dashboard/analysis";
-import { ConnectState } from "@/models/connect";
-import { Chart, Tooltip, Geom, Axis } from "bizcharts";
-import styles from "./analysis.less";
-import moment from "moment";
-import { RangePickerValue } from "antd/lib/date-picker/interface";
+  IAnalysisVisitsType,
+} from '@/models/dashboard/analysis';
+import { ConnectState } from '@/models/connect';
+import styles from './analysis.less';
 
 interface IAnalysisProps {
   dispatch: Dispatch<AnyAction>;
@@ -59,24 +59,24 @@ interface IAnalysisInitState {
 const { RangePicker } = DatePicker;
 
 @connect(({ loading, analysis }: IAnalysisState) => ({
-  loading: loading.effects["analysis/getVisits"],
+  loading: loading.effects['analysis/getVisits'],
   visits: analysis.visits,
   payNumbers: analysis.payNumbers,
   percent: analysis.percent,
   sales: analysis.sales,
   onlineSearch: analysis.onlineSearch,
   salesRatio: analysis.salesRatio,
-  ratioChartData: analysis.ratioChartData
+  ratioChartData: analysis.ratioChartData,
 }))
 class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
   constructor(props: IAnalysisProps) {
     super(props);
     this.state = {
-      key: "tab1",
-      chartSaleAndVisitTitle: "销售趋势",
-      listSaleAndVisitTitle: "门店销售额排名",
+      key: 'tab1',
+      chartSaleAndVisitTitle: '销售趋势',
+      listSaleAndVisitTitle: '门店销售额排名',
       rangeDate: [moment(), moment()],
-      selectedDate: "day"
+      selectedDate: 'day',
     };
   }
 
@@ -92,81 +92,81 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
   getVisits = async () => {
     const { dispatch } = this.props;
     await dispatch({
-      type: "analysis/getVisits"
+      type: 'analysis/getVisits',
     });
   };
 
   getPayNumbers = async () => {
     const { dispatch } = this.props;
     await dispatch({
-      type: "analysis/getPayNumbers"
+      type: 'analysis/getPayNumbers',
     });
   };
 
   getPercent = async () => {
     const { dispatch } = this.props;
     await dispatch({
-      type: "analysis/getPercent"
+      type: 'analysis/getPercent',
     });
   };
 
   getSales = async () => {
     const { dispatch } = this.props;
     await dispatch({
-      type: "analysis/getSales"
+      type: 'analysis/getSales',
     });
   };
 
   getOnlineSearch = async () => {
     const { dispatch } = this.props;
     await dispatch({
-      type: "analysis/getOnlineSearch"
+      type: 'analysis/getOnlineSearch',
     });
   };
 
   getSalesRatioChartDate = async () => {
     const { dispatch } = this.props;
     await dispatch({
-      type: "analysis/getSalesRatioChartDate"
+      type: 'analysis/getSalesRatioChartDate',
     });
   };
 
   onTabChange = (key: string) => {
-    if (key !== "tab1") {
+    if (key !== 'tab1') {
       this.setState({
         key,
-        chartSaleAndVisitTitle: "访问量趋势",
-        listSaleAndVisitTitle: "门店访问量排名"
+        chartSaleAndVisitTitle: '访问量趋势',
+        listSaleAndVisitTitle: '门店访问量排名',
       });
     } else {
       this.setState({
         key,
-        chartSaleAndVisitTitle: "销售趋势",
-        listSaleAndVisitTitle: "门店销售额排名"
+        chartSaleAndVisitTitle: '销售趋势',
+        listSaleAndVisitTitle: '门店销售额排名',
       });
     }
   };
 
   selectDate = (selectedDate: string) => {
     let currentDateVar: RangePickerValue;
-    if (selectedDate === "day") {
+    if (selectedDate === 'day') {
       currentDateVar = [moment(), moment()];
-    } else if (selectedDate === "week") {
+    } else if (selectedDate === 'week') {
       currentDateVar = [moment().weekday(0), moment().weekday(6)];
-    } else if (selectedDate === "month") {
+    } else if (selectedDate === 'month') {
       const monthStart = `${moment().year()}+${moment().month() + 1}+'01'`;
       const monthEnd = `${moment().year()}+${moment().month() +
-        1}+${moment().daysInMonth()}`;
+      1}+${moment().daysInMonth()}`;
       currentDateVar = [
-        moment(monthStart, "YYYY-MM-DD"),
-        moment(monthEnd, "YYYY-MM-DD")
+        moment(monthStart, 'YYYY-MM-DD'),
+        moment(monthEnd, 'YYYY-MM-DD'),
       ];
-    } else if (selectedDate === "year") {
+    } else if (selectedDate === 'year') {
       const yearStart = `${moment().year()}+'01'+'01'`;
       const yearEnd = `${moment().year()}+'12'+'31'`;
       currentDateVar = [
-        moment(yearStart, "YYYY-MM-DD"),
-        moment(yearEnd, "YYYY-MM-DD")
+        moment(yearStart, 'YYYY-MM-DD'),
+        moment(yearEnd, 'YYYY-MM-DD'),
       ];
     } else {
       currentDateVar = [moment(), moment()];
@@ -185,7 +185,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
       sales,
       onlineSearch,
       salesRatio,
-      ratioChartData
+      ratioChartData,
     } = this.props;
     // eslint-disable-next-line max-len
     const {
@@ -193,31 +193,31 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
       chartSaleAndVisitTitle,
       listSaleAndVisitTitle,
       rangeDate,
-      selectedDate
+      selectedDate,
     } = this.state;
-    console.log("loading", loading);
-    console.log("onlineSearch", onlineSearch);
-    console.log("salesRatio", salesRatio);
-    console.log("ratioChartData", ratioChartData);
+    console.log('loading', loading);
+    console.log('onlineSearch', onlineSearch);
+    console.log('salesRatio', salesRatio);
+    console.log('ratioChartData', ratioChartData);
     const payNumbersScale = {
       date: {
-        type: "cat"
-      }
+        type: 'cat',
+      },
     };
     const salesScale = {
       month: {
-        type: "cat"
-      }
+        type: 'cat',
+      },
     };
     const tabList = [
       {
-        key: "tab1",
-        tab: "销售额"
+        key: 'tab1',
+        tab: '销售额',
       },
       {
-        key: "tab2",
-        tab: "访问量"
-      }
+        key: 'tab2',
+        tab: '访问量',
+      },
     ];
     const chartSaleAndVisit = (
       <Row>
@@ -230,23 +230,23 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
             forceFit
             padding="auto"
           >
-            <Axis name="month" />
-            <Axis name="value" />
+            <Axis name="month"/>
+            <Axis name="value"/>
             <Tooltip
               showTitle={false}
               crosshairs={{
-                type: "rect"
+                type: 'rect',
               }}
             />
             <Geom
               type="interval"
               position="month*value"
               tooltip={[
-                "month*value",
+                'month*value',
                 (month, value) => ({
                   name: month,
-                  value
-                })
+                  value,
+                }),
               ]}
             />
           </Chart>
@@ -263,8 +263,8 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                       <span
                         className={styles.sales}
                         style={{
-                          color: "#fff",
-                          backgroundColor: "#314659"
+                          color: '#fff',
+                          backgroundColor: '#314659',
                         }}
                       >
                         {index + 1}
@@ -272,7 +272,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                     ) : (
                       <span className={styles.sales}>{index + 1}</span>
                     )}
-                    <List.Item.Meta description={item.shop} />
+                    <List.Item.Meta description={item.shop}/>
                   </List.Item>
                 ) : (
                   <span></span>
@@ -285,33 +285,33 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
     );
     const contentList = {
       tab1: <Row>{chartSaleAndVisit}</Row>,
-      tab2: <Row>{chartSaleAndVisit}</Row>
+      tab2: <Row>{chartSaleAndVisit}</Row>,
     };
     const salesExtra = (
       <div>
         <a
-          onClick={() => this.selectDate("day")}
-          className={selectedDate === "day" ? styles.currentDate : ""}
+          onClick={() => this.selectDate('day')}
+          className={selectedDate === 'day' ? styles.currentDate : ''}
         >
-          {"今日"}
+          {'今日'}
         </a>
         <a
-          onClick={() => this.selectDate("week")}
-          className={selectedDate === "week" ? styles.currentDate : ""}
+          onClick={() => this.selectDate('week')}
+          className={selectedDate === 'week' ? styles.currentDate : ''}
         >
-          {"本周"}
+          {'本周'}
         </a>
         <a
-          onClick={() => this.selectDate("month")}
-          className={selectedDate === "month" ? styles.currentDate : ""}
+          onClick={() => this.selectDate('month')}
+          className={selectedDate === 'month' ? styles.currentDate : ''}
         >
-          {"本月"}
+          {'本月'}
         </a>
         <a
-          onClick={() => this.selectDate("year")}
-          className={selectedDate === "year" ? styles.currentDate : ""}
+          onClick={() => this.selectDate('year')}
+          className={selectedDate === 'year' ? styles.currentDate : ''}
         >
-          {"全年"}
+          {'全年'}
         </a>
         <RangePicker
           style={{ width: 256 }}
@@ -330,7 +330,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
     );
     const onlineSearchExtra = (
       <Dropdown overlay={onlineSearchExtraItem}>
-        <Icon type="ellipsis" />
+        <Icon type="ellipsis"/>
       </Dropdown>
     );
     return (
@@ -340,11 +340,11 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
             <Card>
               <Row>
                 <Col span={22}>
-                  <span style={{ color: "rgba(0,0,0,.45)" }}>总销售额</span>
+                  <span style={{ color: 'rgba(0,0,0,.45)' }}>总销售额</span>
                 </Col>
                 <Col span={2}>
                   <AntdTooltip title="指标说明">
-                    <Icon type="info-circle" />
+                    <Icon type="info-circle"/>
                   </AntdTooltip>
                 </Col>
               </Row>
@@ -352,14 +352,14 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
               <Row style={{ height: 46 }} type="flex" align="bottom">
                 <Col span={12}>
                   周同比&nbsp;12%
-                  <Icon type="caret-up" style={{ color: "red" }} />
+                  <Icon type="caret-up" style={{ color: 'red' }}/>
                 </Col>
                 <Col span={12}>
                   周同比&nbsp;12%
-                  <Icon type="caret-down" style={{ color: "green" }} />
+                  <Icon type="caret-down" style={{ color: 'green' }}/>
                 </Col>
               </Row>
-              <Divider style={{ margin: "12px 0" }} />
+              <Divider style={{ margin: '12px 0' }}/>
               <span>日销售额￥12,423</span>
             </Card>
           </Col>
@@ -367,11 +367,11 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
             <Card>
               <Row>
                 <Col span={22}>
-                  <span style={{ color: "rgba(0,0,0,.45)" }}>访问量</span>
+                  <span style={{ color: 'rgba(0,0,0,.45)' }}>访问量</span>
                 </Col>
                 <Col span={2}>
                   <AntdTooltip title="指标说明">
-                    <Icon type="info-circle" />
+                    <Icon type="info-circle"/>
                   </AntdTooltip>
                 </Col>
               </Row>
@@ -382,35 +382,35 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                     <Tooltip
                       showTitle={false}
                       crosshairs={{
-                        type: "rect"
+                        type: 'rect',
                       }}
                     />
                     <Geom
                       type="area"
                       position="year*value"
                       tooltip={[
-                        "year*value",
+                        'year*value',
                         (year, value) => ({
                           name: year,
-                          value
-                        })
+                          value,
+                        }),
                       ]}
                     />
                     <Geom
                       type="line"
                       position="year*value"
                       tooltip={[
-                        "year*value",
+                        'year*value',
                         (year, value) => ({
                           name: year,
-                          value
-                        })
+                          value,
+                        }),
                       ]}
                     />
                   </Chart>
                 </Col>
               </Row>
-              <Divider style={{ margin: "12px 0" }} />
+              <Divider style={{ margin: '12px 0' }}/>
               <span>日访问量 1,234</span>
             </Card>
           </Col>
@@ -418,11 +418,11 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
             <Card>
               <Row>
                 <Col span={22}>
-                  <span style={{ color: "rgba(0,0,0,.45)" }}>访问量</span>
+                  <span style={{ color: 'rgba(0,0,0,.45)' }}>访问量</span>
                 </Col>
                 <Col span={2}>
                   <AntdTooltip title="指标说明">
-                    <Icon type="info-circle" />
+                    <Icon type="info-circle"/>
                   </AntdTooltip>
                 </Col>
               </Row>
@@ -439,24 +439,24 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                     <Tooltip
                       showTitle={false}
                       crosshairs={{
-                        type: "rect"
+                        type: 'rect',
                       }}
                     />
                     <Geom
                       type="interval"
                       position="date*value"
                       tooltip={[
-                        "date*value",
+                        'date*value',
                         (date, value) => ({
                           name: date,
-                          value
-                        })
+                          value,
+                        }),
                       ]}
                     />
                   </Chart>
                 </Col>
               </Row>
-              <Divider style={{ margin: "12px 0" }} />
+              <Divider style={{ margin: '12px 0' }}/>
               <span>转化率 60%</span>
             </Card>
           </Col>
@@ -464,11 +464,11 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
             <Card>
               <Row>
                 <Col span={22}>
-                  <span style={{ color: "rgba(0,0,0,.45)" }}>运营活动效果</span>
+                  <span style={{ color: 'rgba(0,0,0,.45)' }}>运营活动效果</span>
                 </Col>
                 <Col span={2}>
                   <AntdTooltip title="指标说明">
-                    <Icon type="info-circle" />
+                    <Icon type="info-circle"/>
                   </AntdTooltip>
                 </Col>
               </Row>
@@ -482,15 +482,15 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                   />
                 </Col>
               </Row>
-              <Divider style={{ margin: "12px 0" }} />
+              <Divider style={{ margin: '12px 0' }}/>
               <Row>
                 <Col span={12}>
                   周同比&nbsp;12%
-                  <Icon type="caret-up" style={{ color: "red" }} />
+                  <Icon type="caret-up" style={{ color: 'red' }}/>
                 </Col>
                 <Col span={12}>
                   周同比&nbsp;12%
-                  <Icon type="caret-down" style={{ color: "green" }} />
+                  <Icon type="caret-down" style={{ color: 'green' }}/>
                 </Col>
               </Row>
             </Card>
@@ -517,18 +517,18 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                   style={{
                     paddingLeft: 34,
                     paddingRight: 34,
-                    marginBottom: 24
+                    marginBottom: 24,
                   }}
                 >
                   <Row>
                     <Col span={16}>
-                      <span style={{ color: "rgba(0,0,0,.45)" }}>
+                      <span style={{ color: 'rgba(0,0,0,.45)' }}>
                         搜索用户数
                       </span>
                     </Col>
                     <Col span={6}>
                       <AntdTooltip title="指标说明">
-                        <Icon type="info-circle" />
+                        <Icon type="info-circle"/>
                       </AntdTooltip>
                     </Col>
                   </Row>
@@ -545,7 +545,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                     <Col span={12}>
                       <div style={{ height: 34, lineHeight: 2.5 }}>
                         <span style={{ fontSize: 16 }}>17.1</span>
-                        <Icon type="caret-up" style={{ color: "red" }} />
+                        <Icon type="caret-up" style={{ color: 'red' }}/>
                       </div>
                     </Col>
                   </Row>
@@ -555,18 +555,18 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                   style={{
                     paddingLeft: 34,
                     paddingRight: 34,
-                    marginBottom: 24
+                    marginBottom: 24,
                   }}
                 >
                   <Row>
                     <Col span={16}>
-                      <span style={{ color: "rgba(0,0,0,.45)" }}>
+                      <span style={{ color: 'rgba(0,0,0,.45)' }}>
                         人均搜索次数
                       </span>
                     </Col>
                     <Col span={6}>
                       <AntdTooltip title="指标说明">
-                        <Icon type="info-circle" />
+                        <Icon type="info-circle"/>
                       </AntdTooltip>
                     </Col>
                   </Row>
@@ -581,7 +581,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                     <Col span={12}>
                       <div style={{ height: 34, lineHeight: 2.5 }}>
                         <span style={{ fontSize: 16 }}>26.2</span>
-                        <Icon type="caret-down" style={{ color: "green" }} />
+                        <Icon type="caret-down" style={{ color: 'green' }}/>
                       </div>
                     </Col>
                   </Row>
