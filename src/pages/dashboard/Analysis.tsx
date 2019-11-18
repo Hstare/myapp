@@ -15,8 +15,11 @@ import {
 } from "antd";
 import { connect } from "dva";
 import {
+  IAnalysisOnlineSearchType,
   IAnalysisPayNumsType,
   IAnalysisPercentType,
+  IAnalysisRatioChartDataType,
+  IAnalysisSalesRatioType,
   IAnalysisSalesType,
   IAnalysisStateType,
   IAnalysisVisitsType
@@ -34,6 +37,9 @@ interface IAnalysisProps {
   payNumbers: IAnalysisPayNumsType[];
   percent: IAnalysisPercentType;
   sales: IAnalysisSalesType[];
+  onlineSearch: IAnalysisOnlineSearchType;
+  salesRatio: IAnalysisSalesRatioType;
+  ratioChartData: IAnalysisRatioChartDataType[];
 }
 
 interface IAnalysisState extends ConnectState {
@@ -42,7 +48,7 @@ interface IAnalysisState extends ConnectState {
 }
 
 interface IAnalysisInitState {
-  key?: string;
+  key: string;
   chartSaleAndVisitTitle?: string;
   listSaleAndVisitTitle?: string;
   // rangeDate?: [moment.Moment, moment.Moment],
@@ -57,7 +63,10 @@ const { RangePicker } = DatePicker;
   visits: analysis.visits,
   payNumbers: analysis.payNumbers,
   percent: analysis.percent,
-  sales: analysis.sales
+  sales: analysis.sales,
+  onlineSearch: analysis.onlineSearch,
+  salesRatio: analysis.salesRatio,
+  ratioChartData: analysis.ratioChartData
 }))
 class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
   constructor(props: IAnalysisProps) {
@@ -76,6 +85,8 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
     this.getPayNumbers();
     this.getPercent();
     this.getSales();
+    this.getOnlineSearch();
+    this.getSalesRatioChartDate();
   }
 
   getVisits = async () => {
@@ -103,6 +114,20 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
     const { dispatch } = this.props;
     await dispatch({
       type: "analysis/getSales"
+    });
+  };
+
+  getOnlineSearch = async () => {
+    const { dispatch } = this.props;
+    await dispatch({
+      type: "analysis/getOnlineSearch"
+    });
+  };
+
+  getSalesRatioChartDate = async () => {
+    const { dispatch } = this.props;
+    await dispatch({
+      type: "analysis/getSalesRatioChartDate"
     });
   };
 
@@ -152,7 +177,16 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
   };
 
   render() {
-    const { loading, visits, payNumbers, percent, sales } = this.props;
+    const {
+      loading,
+      visits,
+      payNumbers,
+      percent,
+      sales,
+      onlineSearch,
+      salesRatio,
+      ratioChartData
+    } = this.props;
     // eslint-disable-next-line max-len
     const {
       key,
@@ -162,8 +196,9 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
       selectedDate
     } = this.state;
     console.log("loading", loading);
-    console.log("percent", percent);
-    console.log("sales", sales);
+    console.log("onlineSearch", onlineSearch);
+    console.log("salesRatio", salesRatio);
+    console.log("ratioChartData", ratioChartData);
     const payNumbersScale = {
       date: {
         type: "cat"
@@ -258,28 +293,24 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
           onClick={() => this.selectDate("day")}
           className={selectedDate === "day" ? styles.currentDate : ""}
         >
-          {" "}
           {"今日"}
         </a>
         <a
           onClick={() => this.selectDate("week")}
           className={selectedDate === "week" ? styles.currentDate : ""}
         >
-          {" "}
           {"本周"}
         </a>
         <a
           onClick={() => this.selectDate("month")}
           className={selectedDate === "month" ? styles.currentDate : ""}
         >
-          {" "}
           {"本月"}
         </a>
         <a
           onClick={() => this.selectDate("year")}
           className={selectedDate === "year" ? styles.currentDate : ""}
         >
-          {" "}
           {"全年"}
         </a>
         <RangePicker
@@ -503,15 +534,19 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                   </Row>
                   <Row
                     style={{ height: 32, marginTop: 8 }}
-                    type="flex"
-                    align="top"
+                    // type="flex"
+                    // align="top"
                   >
                     <Col span={12}>
-                      <span style={{ fontSize: 24 }}>12,321</span>
+                      <div style={{ height: 34 }}>
+                        <span style={{ fontSize: 24 }}>12,321</span>
+                      </div>
                     </Col>
                     <Col span={12}>
-                      <span style={{ fontSize: 16 }}>17.1</span>
-                      <Icon type="caret-up" style={{ color: "red" }} />
+                      <div style={{ height: 34, lineHeight: 2.5 }}>
+                        <span style={{ fontSize: 16 }}>17.1</span>
+                        <Icon type="caret-up" style={{ color: "red" }} />
+                      </div>
                     </Col>
                   </Row>
                 </Col>
@@ -544,8 +579,10 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                       <span style={{ fontSize: 24 }}>2.7</span>
                     </Col>
                     <Col span={12}>
-                      <span style={{ fontSize: 16 }}>26.2</span>
-                      <Icon type="caret-down" style={{ color: "green" }} />
+                      <div style={{ height: 34, lineHeight: 2.5 }}>
+                        <span style={{ fontSize: 16 }}>26.2</span>
+                        <Icon type="caret-down" style={{ color: "green" }} />
+                      </div>
                     </Col>
                   </Row>
                 </Col>
