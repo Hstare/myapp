@@ -137,9 +137,31 @@ export default {
         { type: '个护健康', 'value|1000-5000': 2000 },
         { type: '服饰箱包', 'value|1000-5000': 2000 },
         { type: '母婴产品', 'value|1000-5000': 2000 },
-        { type: '其他\'', 'value|1000-5000': 2000 },
+        { type: '其他', 'value|1000-5000': 2000 },
         // { 'type|1': ['家用电器', '食用酒水', '个护健康', '服饰箱包', '母婴产品', '其他'], 'value|1000-5000': 2000 },
       ],
+    },
+  }),
+  'GET /analysis/tabs': mockjs.mock({
+    data: {
+      'tabs|10': [{
+        'id|+1': 1,
+        'convertionRate|1-100': 50,
+        pies: [{
+          item: '不展示1',
+          'value|1-10': 5,
+        }, {
+          item: '不展示2',
+          'value|1-10': 5,
+        }],
+      }],
+    },
+  }),
+  'GET /analysis/tabsChartDate': mockjs.mock({
+    data: {
+      'tabsChartDate|50': [{
+
+      }],
     },
   }),
 };

@@ -3,19 +3,19 @@ import { AnyAction, Dispatch } from 'redux';
 import {
   Card,
   Col,
-  Divider,
-  Icon,
-  Row,
-  Tooltip as AntdTooltip,
-  Progress,
-  List,
   DatePicker,
+  Divider,
   Dropdown,
+  Icon,
+  List,
   Menu,
+  Progress,
+  Row,
   Table,
+  Tooltip as AntdTooltip,
 } from 'antd';
 import { connect } from 'dva';
-import { Chart, Tooltip, Geom, Axis, Coord, Guide, Legend } from 'bizcharts';
+import { Axis, Chart, Coord, Geom, Guide, Legend, Tooltip } from 'bizcharts';
 import moment from 'moment';
 import { RangePickerValue } from 'antd/lib/date-picker/interface';
 import DataSet from '@antv/data-set';
@@ -401,7 +401,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                 </Col>
               </Row>
               <span style={{ fontSize: 30 }}>¥ 126,560</span>
-              <Row style={{ height: 46 }} type="flex" align="bottom">
+              <Row style={{ height: 46 }} type="flex" justify="center" align="bottom">
                 <Col span={12}>
                   周同比&nbsp;12%
                   <Icon type="caret-up" style={{ color: 'red' }} />
@@ -428,7 +428,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                 </Col>
               </Row>
               <span style={{ fontSize: 30 }}>¥ 8,846</span>
-              <Row style={{ height: 46 }} type="flex" align="bottom">
+              <Row style={{ height: 46 }} type="flex" justify="center" align="bottom">
                 <Col span={24}>
                   <Chart height={40} data={visits} forceFit padding="auto">
                     <Tooltip
@@ -479,7 +479,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                 </Col>
               </Row>
               <span style={{ fontSize: 30 }}>¥ 6,560</span>
-              <Row style={{ height: 46 }} type="flex" align="bottom">
+              <Row style={{ height: 46 }} type="flex" justify="center" align="bottom">
                 <Col span={24}>
                   <Chart height={40} data={payNumbers} scale={dateScale} forceFit padding="auto">
                     <Tooltip
@@ -519,7 +519,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                 </Col>
               </Row>
               <span style={{ fontSize: 30 }}>{percent.percent}%</span>
-              <Row style={{ height: 46 }} type="flex" align="bottom">
+              <Row style={{ height: 46 }} type="flex" justify="center" align="bottom">
                 <Col span={24}>
                   <Progress type="line" strokeLinecap="square" percent={percent.percent} />
                 </Col>
@@ -567,8 +567,6 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                   </Row>
                   <Row
                     style={{ height: 32, marginTop: 8 }}
-                    // type="flex"
-                    // align="top"
                   >
                     <Col span={12}>
                       <div style={{ height: 34 }}>
@@ -628,7 +626,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                       </AntdTooltip>
                     </Col>
                   </Row>
-                  <Row style={{ height: 32, marginTop: 8 }} type="flex" align="top">
+                  <Row style={{ height: 32, marginTop: 8 }}>
                     <Col span={12}>
                       <span style={{ fontSize: 24 }}>{onlineSearch.searchNum}</span>
                     </Col>
@@ -690,14 +688,14 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
           </Col>
           <Col span={12}>
             <Card title={salesRatio.title} extra={onlineSearchExtra}>
-              <Row type="flex" align="top">
+              <Row>
                 <Col span={4}>{salesRatio.chartTitle}</Col>
               </Row>
-              <Row style={{ marginTop: 40 }} type="flex" align="bottom">
+              <Row style={{ marginTop: 40 }}>
                 <Col span={24}>
-                  <Chart height={260} width={248} data={dv} padding="auto">
+                  <Chart height={248} width={220} data={dv} padding="auto">
                     <Tooltip showTitle={false} />
-                    <Coord type="theta" radius={0.85} innerRadius={0.7} />
+                    <Coord type="theta" radius={0.9} innerRadius={0.75} />
                     <Axis name="value" />
                     <Geom
                       type="intervalStack"
@@ -720,23 +718,21 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                         position={['50%', '45%']}
                         content="销售额"
                         style={{
-                          lineHeight: 22,
                           fontSize: 14,
                           fontWeight: 400,
                           fill: 'rgba(0,0,0,.45)',
                           textAlign: 'center',
                         }}
-                      ></Text>
+                      />
                       <Text
                         position={['50%', '55%']}
                         content={`¥ ${totalSales}`}
                         style={{
-                          lineHeight: 1.5,
                           fontSize: 25,
                           fill: 'rgba(0,0,0,.65)',
                           textAlign: 'center',
                         }}
-                      ></Text>
+                      />
                     </Guide>
                     <Legend
                       position="right-center"
@@ -766,7 +762,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                   </Chart>
                 </Col>
               </Row>
-              <div style={{ height: 87.5 }}></div>
+              <div style={{ height: 101.16 }}></div>
             </Card>
           </Col>
         </Row>
