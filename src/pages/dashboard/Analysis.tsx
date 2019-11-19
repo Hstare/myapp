@@ -11,12 +11,14 @@ import {
   List,
   DatePicker,
   Dropdown,
-  Menu, Table,
+  Menu,
+  Table,
 } from 'antd';
 import { connect } from 'dva';
-import { Chart, Tooltip, Geom, Axis, Coord } from 'bizcharts';
+import { Chart, Tooltip, Geom, Axis, Coord, Guide, Legend } from 'bizcharts';
 import moment from 'moment';
 import { RangePickerValue } from 'antd/lib/date-picker/interface';
+import DataSet from '@antv/data-set';
 import {
   IAnalysisOnlineSearchTableType,
   IAnalysisOnlineSearchType,
@@ -30,7 +32,6 @@ import {
 } from '@/models/dashboard/analysis';
 import { ConnectState } from '@/models/connect';
 import styles from './analysis.less';
-import DataSet from "@antv/data-set";
 
 interface IAnalysisProps {
   dispatch: Dispatch<AnyAction>;
@@ -162,19 +163,12 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
       currentDateVar = [moment().weekday(0), moment().weekday(6)];
     } else if (selectedDate === 'month') {
       const monthStart = `${moment().year()}+${moment().month() + 1}+'01'`;
-      const monthEnd = `${moment().year()}+${moment().month() +
-      1}+${moment().daysInMonth()}`;
-      currentDateVar = [
-        moment(monthStart, 'YYYY-MM-DD'),
-        moment(monthEnd, 'YYYY-MM-DD'),
-      ];
+      const monthEnd = `${moment().year()}+${moment().month() + 1}+${moment().daysInMonth()}`;
+      currentDateVar = [moment(monthStart, 'YYYY-MM-DD'), moment(monthEnd, 'YYYY-MM-DD')];
     } else if (selectedDate === 'year') {
       const yearStart = `${moment().year()}+'01'+'01'`;
       const yearEnd = `${moment().year()}+'12'+'31'`;
-      currentDateVar = [
-        moment(yearStart, 'YYYY-MM-DD'),
-        moment(yearEnd, 'YYYY-MM-DD'),
-      ];
+      currentDateVar = [moment(yearStart, 'YYYY-MM-DD'), moment(yearEnd, 'YYYY-MM-DD')];
     } else {
       currentDateVar = [moment(), moment()];
     }
@@ -183,8 +177,15 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
     this.setState({ selectedDate });
   };
 
+  arraySum = (dataArray: number[], sum: number) => {
+    // eslint-disable-next-line no-return-assign
+    dataArray.forEach(item => (sum += item));
+    return sum;
+  };
+
   render() {
     const { DataView } = DataSet;
+    const { Text } = Guide;
     const {
       loading,
       visits,
@@ -231,15 +232,9 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
       <Row>
         <Col span={18}>
           <div style={{ marginBottom: 20 }}>{chartSaleAndVisitTitle}</div>
-          <Chart
-            height={300}
-            data={sales}
-            scale={salesScale}
-            forceFit
-            padding="auto"
-          >
-            <Axis name="month"/>
-            <Axis name="value"/>
+          <Chart height={300} data={sales} scale={salesScale} forceFit padding="auto">
+            <Axis name="month" />
+            <Axis name="value" />
             <Tooltip
               showTitle={false}
               crosshairs={{
@@ -280,7 +275,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                     ) : (
                       <span className={styles.sales}>{index + 1}</span>
                     )}
-                    <List.Item.Meta description={item.shop}/>
+                    <List.Item.Meta description={item.shop} />
                   </List.Item>
                 ) : (
                   <span></span>
@@ -338,7 +333,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
     );
     const onlineSearchExtra = (
       <Dropdown overlay={onlineSearchExtraItem}>
-        <Icon type="ellipsis"/>
+        <Icon type="ellipsis" />
       </Dropdown>
     );
     const columns = [
@@ -351,8 +346,9 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
         title: '搜索关键字',
         dataIndex: 'keyword',
         key: 'keyword',
-        render: (text: string, record: IAnalysisOnlineSearchTableType, index: number) =>
-          <a>{`${text}-${record.id}`}</a>,
+        render: (text: string, record: IAnalysisOnlineSearchTableType) => (
+          <a>{`${text}-${record.id}`}</a>
+        ),
       },
       {
         title: '用户数',
@@ -363,9 +359,17 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
         title: '周涨幅',
         dataIndex: 'weekGain',
         key: 'weekGain',
-        render: (text: number, record: IAnalysisOnlineSearchTableType, index: number) =>
-          (text >= 0 ? (<span>{`${text}%`} <Icon type="caret-up" style={{ color: 'red' }}/></span>) :
-            (<span>{`${Math.abs(text)}%`}<Icon type="caret-down" style={{ color: 'green' }}/></span>)),
+        render: (text: number) =>
+          text >= 0 ? (
+            <span>
+              {`${text}%`} <Icon type="caret-up" style={{ color: 'red' }} />
+            </span>
+          ) : (
+            <span>
+              {`${Math.abs(text)}%`}
+              <Icon type="caret-down" style={{ color: 'green' }} />
+            </span>
+          ),
       },
     ];
     const dv = new DataView();
@@ -375,6 +379,11 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
       dimension: 'type',
       as: 'value',
     });
+    // @ts-ignore
+    const totalSales = this.arraySum(
+      ratioChartData.map(item => item.value),
+      0,
+    );
     return (
       <div>
         <Row gutter={16} style={{ paddingTop: 20 }}>
@@ -386,7 +395,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                 </Col>
                 <Col span={2}>
                   <AntdTooltip title="指标说明">
-                    <Icon type="info-circle"/>
+                    <Icon type="info-circle" />
                   </AntdTooltip>
                 </Col>
               </Row>
@@ -394,14 +403,14 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
               <Row style={{ height: 46 }} type="flex" align="bottom">
                 <Col span={12}>
                   周同比&nbsp;12%
-                  <Icon type="caret-up" style={{ color: 'red' }}/>
+                  <Icon type="caret-up" style={{ color: 'red' }} />
                 </Col>
                 <Col span={12}>
                   周同比&nbsp;12%
-                  <Icon type="caret-down" style={{ color: 'green' }}/>
+                  <Icon type="caret-down" style={{ color: 'green' }} />
                 </Col>
               </Row>
-              <Divider style={{ margin: '12px 0' }}/>
+              <Divider style={{ margin: '12px 0' }} />
               <span>日销售额￥12,423</span>
             </Card>
           </Col>
@@ -413,7 +422,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                 </Col>
                 <Col span={2}>
                   <AntdTooltip title="指标说明">
-                    <Icon type="info-circle"/>
+                    <Icon type="info-circle" />
                   </AntdTooltip>
                 </Col>
               </Row>
@@ -452,7 +461,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                   </Chart>
                 </Col>
               </Row>
-              <Divider style={{ margin: '12px 0' }}/>
+              <Divider style={{ margin: '12px 0' }} />
               <span>日访问量 1,234</span>
             </Card>
           </Col>
@@ -464,20 +473,14 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                 </Col>
                 <Col span={2}>
                   <AntdTooltip title="指标说明">
-                    <Icon type="info-circle"/>
+                    <Icon type="info-circle" />
                   </AntdTooltip>
                 </Col>
               </Row>
               <span style={{ fontSize: 30 }}>¥ 6,560</span>
               <Row style={{ height: 46 }} type="flex" align="bottom">
                 <Col span={24}>
-                  <Chart
-                    height={40}
-                    data={payNumbers}
-                    scale={dateScale}
-                    forceFit
-                    padding="auto"
-                  >
+                  <Chart height={40} data={payNumbers} scale={dateScale} forceFit padding="auto">
                     <Tooltip
                       showTitle={false}
                       crosshairs={{
@@ -498,7 +501,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                   </Chart>
                 </Col>
               </Row>
-              <Divider style={{ margin: '12px 0' }}/>
+              <Divider style={{ margin: '12px 0' }} />
               <span>转化率 60%</span>
             </Card>
           </Col>
@@ -510,29 +513,25 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                 </Col>
                 <Col span={2}>
                   <AntdTooltip title="指标说明">
-                    <Icon type="info-circle"/>
+                    <Icon type="info-circle" />
                   </AntdTooltip>
                 </Col>
               </Row>
               <span style={{ fontSize: 30 }}>{percent.percent}%</span>
               <Row style={{ height: 46 }} type="flex" align="bottom">
                 <Col span={24}>
-                  <Progress
-                    type="line"
-                    strokeLinecap="square"
-                    percent={percent.percent}
-                  />
+                  <Progress type="line" strokeLinecap="square" percent={percent.percent} />
                 </Col>
               </Row>
-              <Divider style={{ margin: '12px 0' }}/>
+              <Divider style={{ margin: '12px 0' }} />
               <Row>
                 <Col span={12}>
                   周同比&nbsp;12%
-                  <Icon type="caret-up" style={{ color: 'red' }}/>
+                  <Icon type="caret-up" style={{ color: 'red' }} />
                 </Col>
                 <Col span={12}>
                   周同比&nbsp;12%
-                  <Icon type="caret-down" style={{ color: 'green' }}/>
+                  <Icon type="caret-down" style={{ color: 'green' }} />
                 </Col>
               </Row>
             </Card>
@@ -554,18 +553,14 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
           <Col span={12}>
             <Card title={onlineSearch.title} extra={onlineSearchExtra}>
               <Row>
-                <Col
-                  span={12}
-                >
+                <Col span={12}>
                   <Row>
                     <Col span={16}>
-                      <span style={{ color: 'rgba(0,0,0,.45)' }}>
-                        {onlineSearch.searchUser}
-                      </span>
+                      <span style={{ color: 'rgba(0,0,0,.45)' }}>{onlineSearch.searchUser}</span>
                     </Col>
                     <Col span={6}>
                       <AntdTooltip title="指标说明">
-                        <Icon type="info-circle"/>
+                        <Icon type="info-circle" />
                       </AntdTooltip>
                     </Col>
                   </Row>
@@ -582,7 +577,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                     <Col span={12}>
                       <div style={{ height: 34, lineHeight: 2.5 }}>
                         <span style={{ fontSize: 16 }}>{onlineSearch.userRatio}</span>
-                        <Icon type="caret-up" style={{ color: 'red' }}/>
+                        <Icon type="caret-up" style={{ color: 'red' }} />
                       </div>
                     </Col>
                   </Row>
@@ -595,48 +590,44 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                             type: 'rect',
                           }}
                         />
-                        <Geom type="area"
-                              position="date*value"
-                              tooltip={[
-                                'date*value',
-                                (date, value) => ({
-                                  name: date,
-                                  value,
-                                }),
-                              ]}/>
-                        <Geom type="line"
-                              position="date*value"
-                              tooltip={[
-                                'date*value',
-                                (date, value) => ({
-                                  name: date,
-                                  value,
-                                }),
-                              ]}/>
+                        <Geom
+                          type="area"
+                          position="date*value"
+                          tooltip={[
+                            'date*value',
+                            (date, value) => ({
+                              name: date,
+                              value,
+                            }),
+                          ]}
+                        />
+                        <Geom
+                          type="line"
+                          position="date*value"
+                          tooltip={[
+                            'date*value',
+                            (date, value) => ({
+                              name: date,
+                              value,
+                            }),
+                          ]}
+                        />
                       </Chart>
                     </Col>
                   </Row>
                 </Col>
-                <Col
-                  span={12}
-                >
+                <Col span={12}>
                   <Row>
                     <Col span={16}>
-                      <span style={{ color: 'rgba(0,0,0,.45)' }}>
-                        {onlineSearch.perSearch}
-                      </span>
+                      <span style={{ color: 'rgba(0,0,0,.45)' }}>{onlineSearch.perSearch}</span>
                     </Col>
                     <Col span={6}>
                       <AntdTooltip title="指标说明">
-                        <Icon type="info-circle"/>
+                        <Icon type="info-circle" />
                       </AntdTooltip>
                     </Col>
                   </Row>
-                  <Row
-                    style={{ height: 32, marginTop: 8 }}
-                    type="flex"
-                    align="top"
-                  >
+                  <Row style={{ height: 32, marginTop: 8 }} type="flex" align="top">
                     <Col span={12}>
                       <span style={{ fontSize: 24 }}>{onlineSearch.searchNum}</span>
                     </Col>
@@ -645,7 +636,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                         <span style={{ fontSize: 16 }}>
                           {onlineSearch.searchRatio && Math.abs(onlineSearch.searchRatio)}
                         </span>
-                        <Icon type="caret-down" style={{ color: 'green' }}/>
+                        <Icon type="caret-down" style={{ color: 'green' }} />
                       </div>
                     </Col>
                   </Row>
@@ -658,69 +649,128 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                             type: 'rect',
                           }}
                         />
-                        <Geom type="area"
-                              position="date*value"
-                              tooltip={[
-                                'date*value',
-                                (date, value) => ({
-                                  name: date,
-                                  value,
-                                }),
-                              ]}/>
-                        <Geom type="line"
-                              position="date*value"
-                              tooltip={[
-                                'date*value',
-                                (date, value) => ({
-                                  name: date,
-                                  value,
-                                }),
-                              ]}/>
+                        <Geom
+                          type="area"
+                          position="date*value"
+                          tooltip={[
+                            'date*value',
+                            (date, value) => ({
+                              name: date,
+                              value,
+                            }),
+                          ]}
+                        />
+                        <Geom
+                          type="line"
+                          position="date*value"
+                          tooltip={[
+                            'date*value',
+                            (date, value) => ({
+                              name: date,
+                              value,
+                            }),
+                          ]}
+                        />
                       </Chart>
                     </Col>
                   </Row>
                 </Col>
               </Row>
               <div style={{ marginTop: 20 }}>
-                <Table rowKey={(record: IAnalysisOnlineSearchTableType, index: number) => `${record.id}`}
-                       columns={columns}
-                       dataSource={onlineSearch.tables}
-                       size="small"
-                       pagination={{ position: 'bottom', defaultPageSize: 5, size: 'small' }}/>
+                <Table
+                  rowKey={(record: IAnalysisOnlineSearchTableType) => `${record.id}`}
+                  columns={columns}
+                  dataSource={onlineSearch.tables}
+                  size="small"
+                  pagination={{ position: 'bottom', defaultPageSize: 5 }}
+                />
               </div>
             </Card>
           </Col>
           <Col span={12}>
             <Card title={salesRatio.title} extra={onlineSearchExtra}>
               <Row type="flex" align="top">
-                <Col span={2}>{salesRatio.chartTitle}</Col>
+                <Col span={4}>{salesRatio.chartTitle}</Col>
               </Row>
-              <Row style={{ marginTop: 40 }}>
-                <Col span={10}>
-                  <Chart height={180} data={dv} forceFit padding="auto">
-                    <Tooltip showTitle={false}
+              <Row style={{ marginTop: 40 }} type="flex" align="bottom">
+                <Col span={24}>
+                  <Chart height={260} width={248} data={dv} padding="auto">
+                    <Tooltip showTitle={false} />
+                    <Coord type="theta" radius={0.85} innerRadius={0.7} />
+                    <Axis name="value" />
+                    <Geom
+                      type="intervalStack"
+                      position="value"
+                      color="type"
+                      tooltip={[
+                        'type*value',
+                        (type, value) => ({
+                          name: type,
+                          value: `${(value * 100).toFixed(2)}%`,
+                        }),
+                      ]}
+                      style={{
+                        lineWidth: 5,
+                        stroke: '#fff',
+                      }}
                     />
-                    <Coord type="theta" radius={0.75} innerRadius={0.6}/>
-                    <Axis name="value"/>
-                    <Geom type="intervalStack"
-                          position="value"
-                          color="type"
-                          tooltip={['type*value', (type, value) => ({
-                            name: type,
-                            value: `${Math.floor(value * 10000) / 100}%`,
-                            // value,
-                          })]}
-                          style={{
-                            lineWidth: 5,
-                            stroke: '#fff',
-                          }}
+                    <Guide>
+                      <Text
+                        position={['50%', '45%']}
+                        content="销售额"
+                        style={{
+                          lineHeight: 22,
+                          fontSize: 14,
+                          fontWeight: 400,
+                          fill: 'rgba(0,0,0,.45)',
+                          textAlign: 'center',
+                        }}
+                      ></Text>
+                      <Text
+                        position={['50%', '55%']}
+                        content={`¥ ${totalSales}`}
+                        style={{
+                          lineHeight: 1.5,
+                          fontSize: 25,
+                          fill: 'rgba(0,0,0,.65)',
+                          textAlign: 'center',
+                        }}
+                      ></Text>
+                    </Guide>
+                    <Legend
+                      position="right-center"
+                      useHtml
+                      g2-legend={{ width: '100%' }}
+                      itemTpl={(value, color, checked, index) => {
+                        // @ts-ignore
+                        const obj: IAnalysisRatioChartDataType = dv.rows[index];
+                        // @ts-ignore
+                        const nativeData: IAnalysisRatioChartDataType = ratioChartData[index];
+                        const checkedStr = checked ? 'checked' : 'unChecked';
+                        return (
+                          `<li class="g2-legend-list-item item-${index} ${checkedStr}" 
+                            data-value="${value}" data-color=${color} style="cursor: pointer;font-size: 14px;marginBottom: 16px; lineHeight: 22px; height: 22px; margin: 0 20px">` +
+                          `<span width=150 style="border: none;padding:0;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;
+                            background-color:${color};"></i>` +
+                          `<span class="g2-legend-text" style="margin-right: 10px">${value}</span></span>` +
+                          `<span style="text-align: right;border: none;padding-left:10px;">${!!obj &&
+                            obj.value &&
+                            (obj.value * 100).toFixed(2)}%</span>` +
+                          `<span style="text-align: right;border: none;padding-right:0;float: right;">￥${!!nativeData &&
+                            nativeData.value}</span>` +
+                          '</li>'
+                        );
+                      }}
                     />
                   </Chart>
                 </Col>
-                <Col span={14}></Col>
               </Row>
+              <div style={{ height: 87.5 }}></div>
             </Card>
           </Col>
+        </Row>
+        <Row style={{ paddingTop: 20 }}>
+          <Col span={24}></Col>
         </Row>
       </div>
     );
