@@ -177,7 +177,8 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
     this.setState({ selectedDate });
   };
 
-  arraySum = (dataArray: number[], sum: number) => {
+  arraySum = (dataArray: (number | undefined)[], sum: number) => {
+    // @ts-ignore
     // eslint-disable-next-line no-return-assign
     dataArray.forEach(item => (sum += item));
     return sum;
@@ -360,7 +361,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
         dataIndex: 'weekGain',
         key: 'weekGain',
         render: (text: number) =>
-          text >= 0 ? (
+          (text >= 0 ? (
             <span>
               {`${text}%`} <Icon type="caret-up" style={{ color: 'red' }} />
             </span>
@@ -369,7 +370,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
               {`${Math.abs(text)}%`}
               <Icon type="caret-down" style={{ color: 'green' }} />
             </span>
-          ),
+          )),
       },
     ];
     const dv = new DataView();
