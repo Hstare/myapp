@@ -35,9 +35,6 @@ import {
 } from '@/models/dashboard/analysis';
 import { ConnectState } from '@/models/connect';
 import styles from './analysis.less';
-// eslint-disable-next-line import/no-unresolved
-// @ts-ignore
-import Slider from 'bizcharts-plugin-slider';
 
 interface IAnalysisProps {
   dispatch: Dispatch<AnyAction>;
@@ -262,8 +259,8 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
         <Col span={18}>
           <div style={{ marginBottom: 20 }}>{chartSaleAndVisitTitle}</div>
           <Chart height={300} data={sales} scale={salesScale} forceFit padding="auto">
-            <Axis name="month" />
-            <Axis name="value" />
+            <Axis name="month"/>
+            <Axis name="value"/>
             <Tooltip
               showTitle={false}
               crosshairs={{
@@ -304,7 +301,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                     ) : (
                       <span className={styles.sales}>{index + 1}</span>
                     )}
-                    <List.Item.Meta description={item.shop} />
+                    <List.Item.Meta description={item.shop}/>
                   </List.Item>
                 ) : (
                   <span></span>
@@ -362,7 +359,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
     );
     const onlineSearchExtra = (
       <Dropdown overlay={onlineSearchExtraItem}>
-        <Icon type="ellipsis" />
+        <Icon type="ellipsis"/>
       </Dropdown>
     );
     const columns = [
@@ -389,16 +386,16 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
         dataIndex: 'weekGain',
         key: 'weekGain',
         render: (text: number) =>
-          text >= 0 ? (
+          (text >= 0 ? (
             <span>
-              {`${text}%`} <Icon type="caret-up" style={{ color: 'red' }} />
+              {`${text}%`} <Icon type="caret-up" style={{ color: 'red' }}/>
             </span>
           ) : (
             <span>
               {`${Math.abs(text)}%`}
-              <Icon type="caret-down" style={{ color: 'green' }} />
+              <Icon type="caret-down" style={{ color: 'green' }}/>
             </span>
-          ),
+          )),
       },
     ];
     const dv = new DataView();
@@ -424,7 +421,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                 </Col>
                 <Col span={2}>
                   <AntdTooltip title="指标说明">
-                    <Icon type="info-circle" />
+                    <Icon type="info-circle"/>
                   </AntdTooltip>
                 </Col>
               </Row>
@@ -432,14 +429,14 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
               <Row style={{ height: 46 }} type="flex" justify="center" align="bottom">
                 <Col span={12}>
                   周同比&nbsp;12%
-                  <Icon type="caret-up" style={{ color: 'red' }} />
+                  <Icon type="caret-up" style={{ color: 'red' }}/>
                 </Col>
                 <Col span={12}>
                   周同比&nbsp;12%
-                  <Icon type="caret-down" style={{ color: 'green' }} />
+                  <Icon type="caret-down" style={{ color: 'green' }}/>
                 </Col>
               </Row>
-              <Divider style={{ margin: '12px 0' }} />
+              <Divider style={{ margin: '12px 0' }}/>
               <span>日销售额￥12,423</span>
             </Card>
           </Col>
@@ -451,7 +448,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                 </Col>
                 <Col span={2}>
                   <AntdTooltip title="指标说明">
-                    <Icon type="info-circle" />
+                    <Icon type="info-circle"/>
                   </AntdTooltip>
                 </Col>
               </Row>
@@ -490,7 +487,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                   </Chart>
                 </Col>
               </Row>
-              <Divider style={{ margin: '12px 0' }} />
+              <Divider style={{ margin: '12px 0' }}/>
               <span>日访问量 1,234</span>
             </Card>
           </Col>
@@ -502,7 +499,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                 </Col>
                 <Col span={2}>
                   <AntdTooltip title="指标说明">
-                    <Icon type="info-circle" />
+                    <Icon type="info-circle"/>
                   </AntdTooltip>
                 </Col>
               </Row>
@@ -530,7 +527,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                   </Chart>
                 </Col>
               </Row>
-              <Divider style={{ margin: '12px 0' }} />
+              <Divider style={{ margin: '12px 0' }}/>
               <span>转化率 60%</span>
             </Card>
           </Col>
@@ -542,25 +539,25 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                 </Col>
                 <Col span={2}>
                   <AntdTooltip title="指标说明">
-                    <Icon type="info-circle" />
+                    <Icon type="info-circle"/>
                   </AntdTooltip>
                 </Col>
               </Row>
               <span style={{ fontSize: 30 }}>{percent.percent}%</span>
               <Row style={{ height: 46 }} type="flex" justify="center" align="bottom">
                 <Col span={24}>
-                  <Progress type="line" strokeLinecap="square" percent={percent.percent} />
+                  <Progress type="line" strokeLinecap="square" percent={percent.percent}/>
                 </Col>
               </Row>
-              <Divider style={{ margin: '12px 0' }} />
+              <Divider style={{ margin: '12px 0' }}/>
               <Row>
                 <Col span={12}>
                   周同比&nbsp;12%
-                  <Icon type="caret-up" style={{ color: 'red' }} />
+                  <Icon type="caret-up" style={{ color: 'red' }}/>
                 </Col>
                 <Col span={12}>
                   周同比&nbsp;12%
-                  <Icon type="caret-down" style={{ color: 'green' }} />
+                  <Icon type="caret-down" style={{ color: 'green' }}/>
                 </Col>
               </Row>
             </Card>
@@ -589,7 +586,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                     </Col>
                     <Col span={6}>
                       <AntdTooltip title="指标说明">
-                        <Icon type="info-circle" />
+                        <Icon type="info-circle"/>
                       </AntdTooltip>
                     </Col>
                   </Row>
@@ -602,7 +599,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                     <Col span={12}>
                       <div style={{ height: 34, lineHeight: 2.5 }}>
                         <span style={{ fontSize: 16 }}>{onlineSearch.userRatio}</span>
-                        <Icon type="caret-up" style={{ color: 'red' }} />
+                        <Icon type="caret-up" style={{ color: 'red' }}/>
                       </div>
                     </Col>
                   </Row>
@@ -648,7 +645,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                     </Col>
                     <Col span={6}>
                       <AntdTooltip title="指标说明">
-                        <Icon type="info-circle" />
+                        <Icon type="info-circle"/>
                       </AntdTooltip>
                     </Col>
                   </Row>
@@ -661,7 +658,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                         <span style={{ fontSize: 16 }}>
                           {onlineSearch.searchRatio && Math.abs(onlineSearch.searchRatio)}
                         </span>
-                        <Icon type="caret-down" style={{ color: 'green' }} />
+                        <Icon type="caret-down" style={{ color: 'green' }}/>
                       </div>
                     </Col>
                   </Row>
@@ -720,9 +717,9 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
               <Row style={{ marginTop: 40 }}>
                 <Col span={24}>
                   <Chart height={248} width={220} data={dv} padding="auto">
-                    <Tooltip showTitle={false} />
-                    <Coord type="theta" radius={0.9} innerRadius={0.75} />
-                    <Axis name="value" />
+                    <Tooltip showTitle={false}/>
+                    <Coord type="theta" radius={0.9} innerRadius={0.75}/>
+                    <Axis name="value"/>
                     <Geom
                       type="intervalStack"
                       position="value"
@@ -776,11 +773,11 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                           `<span width=150 style="border: none;padding:0;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;
                             background-color:${color};"></i>` +
                           `<span class="g2-legend-text" style="margin-right: 10px">${value}</span></span>` +
-                          `<span style="text-align: right;border: none;padding-left:10px;">${!!obj &&
-                            obj.value &&
-                            (obj.value * 100).toFixed(2)}%</span>` +
-                          `<span style="text-align: right;border: none;padding-right:0;float: right;">￥${!!nativeData &&
-                            nativeData.value}</span>` +
+                          `<span style="text-align: right;border: none;padding-left:10px;">${ !!obj &&
+                          obj.value &&
+                          (obj.value * 100).toFixed(2)}%</span>` +
+                          `<span style="text-align: right;border: none;padding-right:0;float: right;">￥${ !!nativeData &&
+                          nativeData.value}</span>` +
                           '</li>'
                         );
                       }}
@@ -813,11 +810,11 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                       style={{ marginTop: 20 }}
                       padding="auto"
                     >
-                      <Axis name="date" />
-                      <Legend marker="hyphen" position="top-center" layout="horizontal" />
-                      <Tooltip />
-                      <Geom type="line" position="date*passengerFlow" color="#1890ff" />
-                      <Geom type="line" position="date*payNum" color="green" />
+                      <Axis name="date"/>
+                      <Legend marker="hyphen" position="top-center" layout="horizontal"/>
+                      <Tooltip/>
+                      <Geom type="line" position="date*passengerFlow" color="#1890ff"/>
+                      <Geom type="line" position="date*payNum" color="green"/>
                     </Chart>
                   </TabPane>
                 ))}
@@ -825,28 +822,6 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
             </Card>
           </Col>
         </Row>
-        <div>
-          <Slider
-            width="auto"
-            height={26}
-            data={tabsChartDate}
-            // start={ds.state.start}
-            // end={ds.state.end}
-            xAxis="time"
-            yAxis="flow"
-            // scales={{
-            //   time: {
-            //     type: "time",
-            //     tickCount: 10,
-            //     mask: "M/DD H:mm"
-            //   }
-            // }}
-            // backgroundChart={{
-            //   type: "line"
-            // }}
-            // onChange={this.onChange.bind(this)}
-          />
-        </div>
       </div>
     );
   }
@@ -854,32 +829,33 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
   // eslint-disable-next-line class-methods-use-this,react/sort-comp
   private getTab(tab: IAnalysisTabsType): React.ReactNode {
     return (
-      <div>
-        {/* <div style={{ display: 'inline-block' }}> */}
-        {/*  <div> */}
-        {/*    Stores{tab.id} */}
-        {/*  </div> */}
-        {/*  <div style={{ color: 'rgba(0,0,0,.45)', height: 22, fontSize: 14, lineHeight: 22 }}> */}
-        {/*    <span>转化率</span> */}
-        {/*  </div> */}
-        {/*  <div style={{ color: 'rgba(0,0,0,.85)', height: 32, fontSize: 24, lineHeight: 32 }}> */}
-        {/*    <span>{tab.convertionRate}%</span> */}
-        {/*  </div> */}
-        {/* </div> */}
-        <Chart height={64} data={tab.pies} width={60} forceFit>
-          <Coord type="theta" radius={0.75} innerRadius={0.4} />
-          <Axis name="value" />
+      <span>
+        <div style={{ display: 'inline-block' }}>
+             <div>
+              Stores{tab.id}
+            </div>
+            <div style={{ color: 'rgba(0,0,0,.45)', fontSize: 14 }}>
+              <span>转化率</span>
+            </div>
+            <div style={{ color: 'rgba(0,0,0,.85)', fontSize: 24 }}>
+              <span>{tab.convertionRate}%</span>
+            </div>
+        </div>
+        <div style={{ display: 'inline-block' }}>
+        <Chart height={64} data={tab.pies} width={60} padding="auto">
+          <Coord type="theta" radius={0.75} innerRadius={0.4}/>
           <Geom
             type="intervalStack"
             position="value"
             color="item"
             style={{
-              lineWidth: 5,
+              lineWidth: 2,
               stroke: '#fff',
             }}
           />
         </Chart>
-      </div>
+        </div>
+      </span>
     );
   }
 }
