@@ -33,3 +33,11 @@ export async function getOnlineSearch(currentPage: number, pageSize: number) {
 export async function getSalesRatioChartDate() {
   return request.get('/analysis/salesRatioChartDate');
 }
+
+export async function getTabs() {
+  return request.get('/analysis/tabs');
+}
+
+export async function getTabsChartDate() {
+  return request.get('/analysis/tabsChartDate');
+}

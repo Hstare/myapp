@@ -6,6 +6,8 @@ import {
   getPercent,
   getSales,
   getSalesRatioChartDate,
+  getTabs,
+  getTabsChartDate,
   getVisits,
 } from '@/services/dashboard/analysis';
 
@@ -32,10 +34,10 @@ export interface IAnalysisSalesType {
 }
 
 export interface IAnalysisOnlineSearchTableType {
-  id: number,
-  keyword: string,
-  users: number,
-  weekGain: number,
+  id: number;
+  keyword: string;
+  users: number;
+  weekGain: number;
 }
 
 export interface IAnalysisOnlineSearchType {
@@ -61,6 +63,23 @@ export interface IAnalysisRatioChartDataType {
   value?: number;
 }
 
+export interface IAnalysisPiesType {
+  item?: string;
+  value?: number;
+}
+
+export interface IAnalysisTabsType {
+  id?: number;
+  convertionRate?: number;
+  pies: IAnalysisPiesType[];
+}
+
+export interface IAnalysisTabsChartDateType {
+  date?: string;
+  passengerFlow?: number;
+  payNum: number;
+}
+
 export interface IAnalysisStateType {
   visits?: IAnalysisVisitsType[];
   payNumbers?: IAnalysisPayNumsType[];
@@ -69,6 +88,8 @@ export interface IAnalysisStateType {
   onlineSearch?: IAnalysisOnlineSearchType;
   salesRatio?: IAnalysisSalesRatioType;
   ratioChartData?: IAnalysisRatioChartDataType[];
+  tabs?: IAnalysisTabsType[];
+  tabsChartDate?: IAnalysisTabsChartDateType[];
 }
 
 export interface IAnalysisModelType {
@@ -81,6 +102,8 @@ export interface IAnalysisModelType {
     getSales: Effect;
     getOnlineSearch: Effect;
     getSalesRatioChartDate: Effect;
+    getTabs: Effect;
+    getTabsChartDate: Effect;
   };
   reducers: {
     saveVisits: Reducer<IAnalysisStateType>;
@@ -89,6 +112,8 @@ export interface IAnalysisModelType {
     saveSales: Reducer<IAnalysisStateType>;
     saveOnlineSearch: Reducer<IAnalysisStateType>;
     saveSalesRatioChartDate: Reducer<IAnalysisStateType>;
+    saveTabs: Reducer<IAnalysisStateType>;
+    saveTabsChartDate: Reducer<IAnalysisStateType>;
   };
 }
 
@@ -102,6 +127,8 @@ const AnalysisModel: IAnalysisModelType = {
     onlineSearch: {},
     salesRatio: {},
     ratioChartData: [],
+    tabs: [],
+    tabsChartDate: [],
   },
   effects: {
     *getVisits(_, { call, put }) {
@@ -148,6 +175,20 @@ const AnalysisModel: IAnalysisModelType = {
         payload: response,
       });
     },
+    *getTabs(_, { call, put }) {
+      const response = yield call(() => getTabs());
+      yield put({
+        type: 'saveTabs',
+        payload: response,
+      });
+    },
+    *getTabsChartDate(_, { call, put }) {
+      const response = yield call(() => getTabsChartDate());
+      yield put({
+        type: 'saveTabsChartDate',
+        payload: response,
+      });
+    },
   },
   reducers: {
     saveVisits(state, { payload }) {
@@ -185,6 +226,18 @@ const AnalysisModel: IAnalysisModelType = {
       return {
         ...state,
         ratioChartData: action.payload.data.ratioChartData,
+      };
+    },
+    saveTabs(state, action) {
+      return {
+        ...state,
+        tabs: action.payload.data.tabs,
+      };
+    },
+    saveTabsChartDate(state, action) {
+      return {
+        ...state,
+        tabsChartDate: action.payload.data.tabsChartDate,
       };
     },
   },

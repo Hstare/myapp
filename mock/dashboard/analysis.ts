@@ -144,24 +144,83 @@ export default {
   }),
   'GET /analysis/tabs': mockjs.mock({
     data: {
-      'tabs|10': [{
-        'id|+1': 1,
-        'convertionRate|1-100': 50,
-        pies: [{
-          item: '不展示1',
-          'value|1-10': 5,
-        }, {
-          item: '不展示2',
-          'value|1-10': 5,
-        }],
-      }],
+      'tabs|10': [
+        {
+          'id|+1': 1,
+          'convertionRate|1-100': 50,
+          pies: [
+            {
+              item: '不展示1',
+              'value|1-10': 5,
+            },
+            {
+              item: '不展示2',
+              'value|1-10': 5,
+            },
+          ],
+        },
+      ],
     },
   }),
   'GET /analysis/tabsChartDate': mockjs.mock({
     data: {
-      'tabsChartDate|50': [{
-
-      }],
+      tabsChartDate: [
+        {
+          date: '9:14',
+          'passengerFlow|1-120': 60,
+          'payNum|1-120': 60,
+        },
+        {
+          date: '10:14',
+          'passengerFlow|1-120': 60,
+          'payNum|1-120': 60,
+        },
+        {
+          date: '11:14',
+          'passengerFlow|1-120': 60,
+          'payNum|1-120': 60,
+        },
+        {
+          date: '12:14',
+          'passengerFlow|1-120': 60,
+          'payNum|1-120': 60,
+        },
+        {
+          date: '13:14',
+          'passengerFlow|1-120': 60,
+          'payNum|1-120': 60,
+        },
+        {
+          date: '14:14',
+          'passengerFlow|1-120': 60,
+          'payNum|1-120': 60,
+        },
+        {
+          date: '15:14',
+          'passengerFlow|1-120': 60,
+          'payNum|1-120': 60,
+        },
+        {
+          date: '16:14',
+          'passengerFlow|1-120': 60,
+          'payNum|1-120': 60,
+        },
+        {
+          date: '17:14',
+          'passengerFlow|1-120': 60,
+          'payNum|1-120': 60,
+        },
+        {
+          date: '18:14',
+          'passengerFlow|1-120': 60,
+          'payNum|1-120': 60,
+        },
+        {
+          date: '18:44',
+          'passengerFlow|1-120': 60,
+          'payNum|1-120': 60,
+        },
+      ],
     },
   }),
 };

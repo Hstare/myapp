@@ -12,6 +12,7 @@ import {
   Progress,
   Row,
   Table,
+  Tabs,
   Tooltip as AntdTooltip,
 } from 'antd';
 import { connect } from 'dva';
@@ -28,10 +29,15 @@ import {
   IAnalysisSalesRatioType,
   IAnalysisSalesType,
   IAnalysisStateType,
+  IAnalysisTabsChartDateType,
+  IAnalysisTabsType,
   IAnalysisVisitsType,
 } from '@/models/dashboard/analysis';
 import { ConnectState } from '@/models/connect';
 import styles from './analysis.less';
+// eslint-disable-next-line import/no-unresolved
+// @ts-ignore
+import Slider from 'bizcharts-plugin-slider';
 
 interface IAnalysisProps {
   dispatch: Dispatch<AnyAction>;
@@ -43,6 +49,8 @@ interface IAnalysisProps {
   onlineSearch: IAnalysisOnlineSearchType;
   salesRatio: IAnalysisSalesRatioType;
   ratioChartData: IAnalysisRatioChartDataType[];
+  tabs: IAnalysisTabsType[];
+  tabsChartDate?: IAnalysisTabsChartDateType[];
 }
 
 interface IAnalysisState extends ConnectState {
@@ -61,6 +69,7 @@ interface IAnalysisInitState {
 }
 
 const { RangePicker } = DatePicker;
+const { TabPane } = Tabs;
 
 @connect(({ loading, analysis }: IAnalysisState) => ({
   loading: loading.effects['analysis/getVisits'],
@@ -71,6 +80,8 @@ const { RangePicker } = DatePicker;
   onlineSearch: analysis.onlineSearch,
   salesRatio: analysis.salesRatio,
   ratioChartData: analysis.ratioChartData,
+  tabs: analysis.tabs,
+  tabsChartDate: analysis.tabsChartDate,
 }))
 class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
   constructor(props: IAnalysisProps) {
@@ -93,6 +104,8 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
     this.getSales();
     this.getOnlineSearch();
     this.getSalesRatioChartDate();
+    this.getTabs();
+    this.getTabsChartDate();
   }
 
   getVisits = async () => {
@@ -136,6 +149,20 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
     const { dispatch } = this.props;
     await dispatch({
       type: 'analysis/getSalesRatioChartDate',
+    });
+  };
+
+  getTabs = async () => {
+    const { dispatch } = this.props;
+    await dispatch({
+      type: 'analysis/getTabs',
+    });
+  };
+
+  getTabsChartDate = async () => {
+    const { dispatch } = this.props;
+    await dispatch({
+      type: 'analysis/getTabsChartDate',
     });
   };
 
@@ -196,6 +223,8 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
       onlineSearch,
       salesRatio,
       ratioChartData,
+      tabs,
+      tabsChartDate,
     } = this.props;
     // eslint-disable-next-line max-len
     const {
@@ -206,9 +235,8 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
       selectedDate,
     } = this.state;
     console.log('loading', loading);
-    console.log('onlineSearch', onlineSearch);
-    console.log('salesRatio', salesRatio);
-    console.log('ratioChartData', ratioChartData);
+    console.log('tabs', tabs);
+    console.log('tabsChartDate', tabsChartDate);
     const dateScale = {
       date: {
         type: 'cat',
@@ -361,7 +389,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
         dataIndex: 'weekGain',
         key: 'weekGain',
         render: (text: number) =>
-          (text >= 0 ? (
+          text >= 0 ? (
             <span>
               {`${text}%`} <Icon type="caret-up" style={{ color: 'red' }} />
             </span>
@@ -370,7 +398,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
               {`${Math.abs(text)}%`}
               <Icon type="caret-down" style={{ color: 'green' }} />
             </span>
-          )),
+          ),
       },
     ];
     const dv = new DataView();
@@ -565,9 +593,7 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
                       </AntdTooltip>
                     </Col>
                   </Row>
-                  <Row
-                    style={{ height: 32, marginTop: 8 }}
-                  >
+                  <Row style={{ height: 32, marginTop: 8 }}>
                     <Col span={12}>
                       <div style={{ height: 34 }}>
                         <span style={{ fontSize: 24 }}>{onlineSearch.searchUsers}</span>
@@ -767,8 +793,92 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
           </Col>
         </Row>
         <Row style={{ paddingTop: 20 }}>
-          <Col span={24}></Col>
+          <Col span={24}>
+            <Card>
+              <Tabs defaultActiveKey="1" tabPosition="top">
+                {tabs.map(tab => (
+                  <TabPane tab={this.getTab(tab)} key={`${tab.id} `}>
+                    <Chart
+                      height={450}
+                      data={tabsChartDate}
+                      scale={{
+                        passengerFlow: {
+                          alias: '客流量',
+                        },
+                        payNum: {
+                          alias: '支付笔数',
+                        },
+                      }}
+                      forceFit
+                      style={{ marginTop: 20 }}
+                      padding="auto"
+                    >
+                      <Axis name="date" />
+                      <Legend marker="hyphen" position="top-center" layout="horizontal" />
+                      <Tooltip />
+                      <Geom type="line" position="date*passengerFlow" color="#1890ff" />
+                      <Geom type="line" position="date*payNum" color="green" />
+                    </Chart>
+                  </TabPane>
+                ))}
+              </Tabs>
+            </Card>
+          </Col>
         </Row>
+        <div>
+          <Slider
+            width="auto"
+            height={26}
+            data={tabsChartDate}
+            // start={ds.state.start}
+            // end={ds.state.end}
+            xAxis="time"
+            yAxis="flow"
+            // scales={{
+            //   time: {
+            //     type: "time",
+            //     tickCount: 10,
+            //     mask: "M/DD H:mm"
+            //   }
+            // }}
+            // backgroundChart={{
+            //   type: "line"
+            // }}
+            // onChange={this.onChange.bind(this)}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // eslint-disable-next-line class-methods-use-this,react/sort-comp
+  private getTab(tab: IAnalysisTabsType): React.ReactNode {
+    return (
+      <div>
+        {/* <div style={{ display: 'inline-block' }}> */}
+        {/*  <div> */}
+        {/*    Stores{tab.id} */}
+        {/*  </div> */}
+        {/*  <div style={{ color: 'rgba(0,0,0,.45)', height: 22, fontSize: 14, lineHeight: 22 }}> */}
+        {/*    <span>转化率</span> */}
+        {/*  </div> */}
+        {/*  <div style={{ color: 'rgba(0,0,0,.85)', height: 32, fontSize: 24, lineHeight: 32 }}> */}
+        {/*    <span>{tab.convertionRate}%</span> */}
+        {/*  </div> */}
+        {/* </div> */}
+        <Chart height={64} data={tab.pies} width={60} forceFit>
+          <Coord type="theta" radius={0.75} innerRadius={0.4} />
+          <Axis name="value" />
+          <Geom
+            type="intervalStack"
+            position="value"
+            color="item"
+            style={{
+              lineWidth: 5,
+              stroke: '#fff',
+            }}
+          />
+        </Chart>
       </div>
     );
   }
