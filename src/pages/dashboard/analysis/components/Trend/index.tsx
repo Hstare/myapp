@@ -3,6 +3,8 @@ import React from 'react';
 import classNames from 'classnames';
 import styles from './index.less';
 
+// https://github.com/ant-design/pro-blocks/blob/master/DashboardAnalysis/src/components/Trend/index.tsx
+
 export interface ITrendProps {
   colorful?: boolean;
   flag: 'up' | 'down';
