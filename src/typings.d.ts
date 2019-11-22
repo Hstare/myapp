@@ -19,6 +19,7 @@ declare module '@antv/data-set';
 declare module 'nzh/cn';
 declare module 'webpack-theme-color-replacer';
 declare module 'webpack-theme-color-replacer/client';
+declare module 'numeral';
 
 // declare module 'mockjs';
 
