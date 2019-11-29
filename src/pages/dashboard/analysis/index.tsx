@@ -38,6 +38,8 @@ import {
 } from '@/models/dashboard/analysis';
 import { ConnectState } from '@/models/connect';
 import styles from './index.less';
+import { getTimeDistance } from '@/utils/utils';
+
 // eslint-disable-next-line import/no-unresolved
 
 interface IAnalysisProps {
@@ -184,24 +186,8 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
   };
 
   selectDate = (selectedDate: string) => {
-    let currentDateVar: RangePickerValue;
-    if (selectedDate === 'day') {
-      currentDateVar = [moment(), moment()];
-    } else if (selectedDate === 'week') {
-      currentDateVar = [moment().weekday(0), moment().weekday(6)];
-    } else if (selectedDate === 'month') {
-      const monthStart = `${moment().year()}+${moment().month() + 1}+'01'`;
-      const monthEnd = `${moment().year()}+${moment().month() + 1}+${moment().daysInMonth()}`;
-      currentDateVar = [moment(monthStart, 'YYYY-MM-DD'), moment(monthEnd, 'YYYY-MM-DD')];
-    } else if (selectedDate === 'year') {
-      const yearStart = `${moment().year()}+'01'+'01'`;
-      const yearEnd = `${moment().year()}+'12'+'31'`;
-      currentDateVar = [moment(yearStart, 'YYYY-MM-DD'), moment(yearEnd, 'YYYY-MM-DD')];
-    } else {
-      currentDateVar = [moment(), moment()];
-    }
     // @ts-ignore
-    this.setState({ selectedDate, rangeDate: currentDateVar });
+    this.setState({ selectedDate, rangeDate: getTimeDistance(selectedDate) });
     this.setState({ selectedDate });
   };
 
@@ -422,11 +408,12 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
               <Card>
                 <Row>
                   <Col span={22}>
-                    {/* <span style={{ color: 'rgba(0,0,0,.45)' }}>总销售额</span> */}
-                    <FormattedMessage
-                      id="dashboard.analysis.total-sales"
-                      defaultMessage="Total Sales"
-                    />
+                    <span style={{ color: 'rgba(0,0,0,.45)' }}>
+                      <FormattedMessage
+                        id="dashboard.analysis.total-sales"
+                        defaultMessage="Total Sales"
+                      />
+                    </span>
                   </Col>
                   <Col span={2}>
                     <AntdTooltip title="指标说明">
@@ -453,7 +440,9 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
               <Card>
                 <Row>
                   <Col span={22}>
-                    <FormattedMessage id="dashboard.analysis.visits" defaultMessage="Visits" />
+                    <span style={{ color: 'rgba(0,0,0,.45)' }}>
+                      <FormattedMessage id="dashboard.analysis.visits" defaultMessage="Visits" />
+                    </span>
                   </Col>
                   <Col span={2}>
                     <AntdTooltip title="指标说明">
@@ -504,7 +493,12 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
               <Card>
                 <Row>
                   <Col span={22}>
-                    <FormattedMessage id="dashboard.analysis.payments" defaultMessage="Payments" />
+                    <span style={{ color: 'rgba(0,0,0,.45)' }}>
+                      <FormattedMessage
+                        id="dashboard.analysis.payments"
+                        defaultMessage="Payments"
+                      />
+                    </span>
                   </Col>
                   <Col span={2}>
                     <AntdTooltip title="指标说明">
@@ -544,10 +538,12 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
               <Card>
                 <Row>
                   <Col span={22}>
-                    <FormattedMessage
-                      id="dashboard.analysis.operational-effect"
-                      defaultMessage="Operational effect"
-                    />
+                    <span style={{ color: 'rgba(0,0,0,.45)' }}>
+                      <FormattedMessage
+                        id="dashboard.analysis.operational-effect"
+                        defaultMessage="Operational effect"
+                      />
+                    </span>
                   </Col>
                   <Col span={2}>
                     <AntdTooltip title="指标说明">

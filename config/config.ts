@@ -58,7 +58,7 @@ const plugins: IPlugin[] = [
 ]; // 针对 preview.pro.ant.design 的 GA 统计代码
 
 if (isAntDesignProPreview) {
- /* plugins.push([
+  /* plugins.push([
     'umi-plugin-ga',
     {
       code: 'UA-72788897-6',
@@ -95,11 +95,15 @@ export default {
           path: '/user/login',
           component: './user/login',
         },
+        {
+          component: './404',
+        },
       ],
     },
     {
       path: '/',
       component: '../layouts/SecurityLayout',
+      Routes: ['src/pages/Authorized'],
       routes: [
         {
           path: '/',
@@ -120,7 +124,7 @@ export default {
             {
               path: '/Notice',
               name: 'notice',
-              // authority: ['admin', 'user'],
+              authority: ['admin'],
               icon: 'tool',
               component: './Notice',
             },
@@ -128,11 +132,13 @@ export default {
               path: '/dashboard',
               name: 'dashboard',
               icon: 'dashboard',
+              authority: ['admin'],
               routes: [
                 {
                   path: '/dashboard/analysis',
                   name: 'analysis',
                   icon: 'smile',
+                  // authority: ['admin'],
                   component: './dashboard/Analysis',
                 },
                 {
@@ -140,8 +146,8 @@ export default {
                   name: 'monitor',
                   icon: 'smile',
                   component: './dashboard/Monitor',
-                }
-              ]
+                },
+              ],
             },
             {
               component: './404',
