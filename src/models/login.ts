@@ -45,6 +45,7 @@ const Model: LoginModelType = {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
+        console.log('redirect', redirect);
         if (redirect) {
           const redirectUrlParams = new URL(redirect);
           if (redirectUrlParams.origin === urlParams.origin) {
@@ -56,6 +57,8 @@ const Model: LoginModelType = {
             window.location.href = redirect;
             return;
           }
+        } else {
+          window.location.href = urlParams.origin;
         }
         yield put(routerRedux.replace(redirect || '/'));
       }

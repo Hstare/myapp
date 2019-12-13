@@ -142,4 +142,28 @@ export default {
   },
 
   'GET  /api/login/captcha': getFakeCaptcha,
+
+  'GET /api/currentUserMenu': [
+    {
+      path: '/',
+      redirect: '/welcome',
+    },
+    {
+      path: '/welcome',
+      name: 'welcome',
+      icon: 'smile',
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      icon: 'dashboard',
+      children: [
+        {
+          path: '/dashboard/analysis',
+          name: 'analysis',
+          icon: 'smile',
+        },
+      ],
+    },
+  ],
 };

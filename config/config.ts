@@ -3,6 +3,9 @@ import defaultSettings from './defaultSettings'; // https://umijs.org/config/
 
 import slash from 'slash2';
 import webpackPlugin from './plugin.config';
+
+import routeConfig from './route.config';
+
 const { pwa, primaryColor } = defaultSettings;
 
 // preview.pro.ant.design only do not use in your production ;
@@ -32,11 +35,11 @@ const plugins: IPlugin[] = [
       // },
       pwa: pwa
         ? {
-            workboxPluginMode: 'InjectManifest',
-            workboxOptions: {
-              importWorkboxFrom: 'local',
-            },
-          }
+          workboxPluginMode: 'InjectManifest',
+          workboxOptions: {
+            importWorkboxFrom: 'local',
+          },
+        }
         : false,
       // default close dll, because issue https://github.com/ant-design/ant-design-pro/issues/4665
       // dll features https://webpack.js.org/plugins/dll-plugin/
@@ -85,85 +88,7 @@ export default {
   },
   devtool: isAntDesignProPreview ? 'source-map' : false,
   // umi routes: https://umijs.org/zh/guide/router.html
-  routes: [
-    {
-      path: '/user',
-      component: '../layouts/UserLayout',
-      routes: [
-        {
-          name: 'login',
-          path: '/user/login',
-          component: './user/login',
-        },
-        {
-          component: './404',
-        },
-      ],
-    },
-    {
-      path: '/',
-      component: '../layouts/SecurityLayout',
-      Routes: ['src/pages/Authorized'],
-      routes: [
-        {
-          path: '/',
-          component: '../layouts/BasicLayout',
-          authority: ['admin', 'user'],
-          // Routes: ['src/pages/Authorized'],
-          routes: [
-            {
-              path: '/',
-              redirect: '/welcome',
-            },
-            {
-              path: '/welcome',
-              name: 'welcome',
-              icon: 'smile',
-              component: './Welcome',
-            },
-            {
-              path: '/Notice',
-              name: 'notice',
-              authority: ['admin'],
-              icon: 'tool',
-              component: './Notice',
-            },
-            {
-              path: '/dashboard',
-              name: 'dashboard',
-              icon: 'dashboard',
-              authority: ['admin'],
-              routes: [
-                {
-                  path: '/dashboard/analysis',
-                  name: 'analysis',
-                  icon: 'smile',
-                  // authority: ['admin'],
-                  component: './dashboard/Analysis',
-                },
-                {
-                  path: '/dashboard/monitor',
-                  name: 'monitor',
-                  icon: 'smile',
-                  component: './dashboard/Monitor',
-                },
-              ],
-            },
-            {
-              component: './404',
-            },
-          ],
-        },
-        {
-          component: './404',
-        },
-      ],
-    },
-
-    {
-      component: './404',
-    },
-  ],
+  routes: routeConfig,
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   theme: {
     'primary-color': primaryColor,

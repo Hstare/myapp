@@ -26,9 +26,10 @@ const checkPermissions = <T, K>(
 ): T | K | React.ReactNode => {
   // 没有判定权限.默认查看所有
   // Retirement authority, return target;
-  /*if (!authority) {
+  /* if (!authority) {
     return target;
-  }*/
+  } */
+  console.log('checkPermissions未通过的组件:', Exception);
   if (!authority) {
     return Exception;
   }

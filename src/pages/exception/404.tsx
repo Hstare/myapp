@@ -2,14 +2,14 @@ import { Button, Result } from 'antd';
 import React from 'react';
 import router from 'umi/router';
 
-// 这里应该使用 antd 的 403 result 组件，
+// 这里应该使用 antd 的 404 result 组件，
 // 但是还没发布，先来个简单的。
 
-const NoAuthorityPage: React.FC<{}> = () => (
+const NoFoundPage: React.FC<{}> = () => (
   <Result
-    status="403"
-    title="403"
-    subTitle="抱歉，你无权访问该页面。"
+    status="404"
+    title="404"
+    subTitle="抱歉，你访问的页面不存在"
     extra={
       <Button type="primary" onClick={() => router.push('/')}>
         Back Home
@@ -18,4 +18,4 @@ const NoAuthorityPage: React.FC<{}> = () => (
   ></Result>
 );
 
-export default NoAuthorityPage;
+export default NoFoundPage;

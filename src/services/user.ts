@@ -11,3 +11,8 @@ export async function queryCurrent(): Promise<any> {
 export async function queryNotices(): Promise<any> {
   return request('/api/notices');
 }
+
+export async function queryCurrentMenu(): Promise<any> {
+  console.log('queryCurrentMenu');
+  return request('/api/currentUserMenu');
+}

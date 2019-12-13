@@ -1,8 +1,9 @@
 import { Effect } from 'dva';
 import { Reducer } from 'redux';
 
-import { queryCurrent, query as queryUsers } from '@/services/user';
+import { queryCurrent, query as queryUsers, queryCurrentMenu } from '@/services/user';
 import { setAuthority } from '@/utils/authority';
+import { MenuDataItem } from '@ant-design/pro-layout';
 
 export interface CurrentUser {
   avatar?: string;
@@ -20,6 +21,7 @@ export interface CurrentUser {
 
 export interface UserModelState {
   currentUser?: CurrentUser;
+  currentMenu?: MenuDataItem[];
 }
 
 export interface UserModelType {
@@ -28,9 +30,11 @@ export interface UserModelType {
   effects: {
     fetch: Effect;
     fetchCurrent: Effect;
+    fetchCurrentMenu: Effect;
   };
   reducers: {
     saveCurrentUser: Reducer<UserModelState>;
+    saveCurrentMenu: Reducer<UserModelState>;
     changeNotifyCount: Reducer<UserModelState>;
   };
 }
@@ -40,6 +44,7 @@ const UserModel: UserModelType = {
 
   state: {
     currentUser: {},
+    currentMenu: [],
   },
 
   effects: {
@@ -57,6 +62,14 @@ const UserModel: UserModelType = {
         type: 'saveCurrentUser',
         payload: response,
       });
+    },
+    *fetchCurrentMenu(_, { call, put }) {
+      const response = yield call(queryCurrentMenu);
+      console.log('获取到了当前用户的目录：', response);
+      yield put({
+        type: 'saveCurrentMenu',
+        payload: response,
+      })
     },
   },
 
@@ -81,6 +94,12 @@ const UserModel: UserModelType = {
           unreadCount: action.payload.unreadCount,
         },
       };
+    },
+    saveCurrentMenu(state, action) {
+      return {
+        ...state,
+        currentMenu: action.payload || [],
+      }
     },
   },
 };

@@ -42,6 +42,7 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
  */
 const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
   menuList.map(item => {
+    console.log('use Authorized check all menu item', item);
     const localItem = {
       ...item,
       children: item.children ? menuDataRender(item.children) : [],
@@ -105,7 +106,9 @@ const footerRender: BasicLayoutProps['footerRender'] = () => {
 };
 
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
-  const { dispatch, children, settings } = props;
+  const { dispatch, children, settings/* , menuData */ } = props;
+  // eslint-disable-next-line no-undef
+
   /**
    * constructor
    */
@@ -118,6 +121,9 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       dispatch({
         type: 'settings/getSetting',
       });
+     /* dispatch({
+        type: 'user/fetchCurrentMenu',
+      }); */
     }
   }, []);
 
@@ -173,7 +179,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   );
 };
 
-export default connect(({ global, settings }: ConnectState) => ({
+export default connect(({ global, settings, user }: ConnectState) => ({
   collapsed: global.collapsed,
   settings,
+  menuData: user.currentMenu,
 }))(BasicLayout);
