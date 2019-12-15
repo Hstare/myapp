@@ -42,7 +42,6 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
  */
 const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
   menuList.map(item => {
-    console.log('use Authorized check all menu item', item);
     const localItem = {
       ...item,
       children: item.children ? menuDataRender(item.children) : [],
@@ -106,18 +105,16 @@ const footerRender: BasicLayoutProps['footerRender'] = () => {
 };
 
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
-  const { dispatch, children, settings/* , menuData */ } = props;
-  // eslint-disable-next-line no-undef
+  const { dispatch, children, settings } = props;
 
   /**
    * constructor
    */
-
   useEffect(() => {
     if (dispatch) {
-      dispatch({
+      /* dispatch({
         type: 'user/fetchCurrent',
-      });
+      }); */
       dispatch({
         type: 'settings/getSetting',
       });
@@ -138,7 +135,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       });
     }
   };
-
   return (
     <ProLayout
       logo={logo}

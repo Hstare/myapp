@@ -27,10 +27,9 @@ const getRouteAuthority = (path: string, routeData: Route[]) => {
       }
     }
   });
-  console.log('当前路由authorities', authorities);
   return authorities;
 };
-let hasCurrentRoute: boolean = false;
+/* let hasCurrentRoute = false;
 // 是否有当前页面
 const isHasCurrentRoute = (path: string, routes: Route[] | []) => {
   // @ts-ignore
@@ -40,12 +39,12 @@ const isHasCurrentRoute = (path: string, routes: Route[] | []) => {
       hasCurrentRoute = true;
       // return true;
     }
-    if (route.children) {
-      isHasCurrentRoute(path, route.children);
+    if (route.routes) {
+      isHasCurrentRoute(path, route.routes);
     }
   });
   // return false;
-};
+}; */
 
 const AuthComponent: React.FC<AuthComponentProps> = ({
      children,
@@ -57,24 +56,13 @@ const AuthComponent: React.FC<AuthComponentProps> = ({
      },
      user,
    }) => {
-  console.log('children', children);
-  console.log('route', route);
-  console.log('location', location);
   const { currentUser } = user;
   const { routes = [] } = route;
   const isLogin = currentUser && currentUser.name;
-  let redirect403Or404;
-  isHasCurrentRoute(location.pathname, routes);
-  console.log('有当前页面', hasCurrentRoute);
-  if (hasCurrentRoute) {
-    redirect403Or404 = <Redirect to="/exception/403"/>
-  } else {
-    redirect403Or404 = <Redirect to="/exception/404"/>
-  }
   return (
     <Authorized
-      authority={getRouteAuthority(location.pathname, routes) || ''}
-      noMatch={isLogin ? redirect403Or404 : <Redirect to="/user/login"/>}
+        authority={getRouteAuthority(location.pathname, routes) || ''}
+      noMatch={isLogin ? <Redirect to="/exception/403"/> : <Redirect to="/user/login"/>}
     >
       {children}
     </Authorized>

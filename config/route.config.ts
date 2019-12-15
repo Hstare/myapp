@@ -1,9 +1,5 @@
 export default [
   {
-    path: '/',
-    redirect: '/user',
-  },
-  {
     path: '/user',
     component: '../layouts/UserLayout',
     routes: [
@@ -29,14 +25,12 @@ export default [
       {
         path: '/',
         component: '../layouts/BasicLayout',
-        // authority: ['admin', 'user'],
-        // Routes: ['src/pages/Authorized'],
         routes: [
-          /*{
+          {
             path: '/',
             authority: ['admin', 'user'],
             redirect: '/welcome',
-          },*/
+          },
           {
             path: '/welcome',
             name: 'welcome',
@@ -86,19 +80,17 @@ export default [
   // exception
   {
     path: '/exception',
-    name: 'exception',
-    icon: 'warning',
-    hideInMenu: true,
+    component: '../layouts/BlankLayout',
     routes: [
       {
         path: '/exception/403',
         name: 'not-permission',
-        component: './Exception/403',
+        component: './exception/403',
       },
       {
         path: '/exception/404',
         name: 'not-find',
-        component: './Exception/404',
+        component: './exception/404',
       },
       /*{
         path: '/exception/500',

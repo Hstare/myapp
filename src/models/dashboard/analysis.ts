@@ -161,7 +161,6 @@ const AnalysisModel: IAnalysisModelType = {
     },
     *getOnlineSearch({ currentPage, pageSize }, { call, put }) {
       const response = yield call(() => getOnlineSearch(currentPage, pageSize));
-      console.log('getOnlineSearch', response);
       yield put({
         type: 'saveOnlineSearch',
         payload: response,
@@ -169,7 +168,6 @@ const AnalysisModel: IAnalysisModelType = {
     },
     *getSalesRatioChartDate(_, { call, put }) {
       const response = yield call(() => getSalesRatioChartDate());
-      console.log('getSalesRatioChartDate', response);
       yield put({
         type: 'saveSalesRatioChartDate',
         payload: response,

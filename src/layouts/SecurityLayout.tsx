@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { Redirect } from 'umi';
 import { stringify } from 'querystring';
-import { ConnectState, ConnectProps } from '@/models/connect';
+import { ConnectProps, ConnectState } from '@/models/connect';
 import { CurrentUser } from '@/models/user';
 import PageLoading from '@/components/PageLoading';
 
@@ -46,7 +46,7 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
       return <PageLoading />;
     }
     if (!isLogin) {
-      return <Redirect to={`/user/login?${queryString}`}></Redirect>;
+      return <Redirect to={`/user/login?${queryString}`}/>;
     }
     return children;
   }

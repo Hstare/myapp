@@ -29,7 +29,6 @@ const checkPermissions = <T, K>(
   /* if (!authority) {
     return target;
   } */
-  console.log('checkPermissions未通过的组件:', Exception);
   if (!authority) {
     return Exception;
   }

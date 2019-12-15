@@ -221,9 +221,6 @@ class Analysis extends Component<IAnalysisProps, IAnalysisInitState> {
       rangeDate,
       selectedDate,
     } = this.state;
-    console.log('loading', loading);
-    console.log('tabs', tabs);
-    console.log('tabsChartDate', tabsChartDate);
     const dateScale = {
       date: {
         type: 'cat',

@@ -1,7 +1,7 @@
 import { Effect } from 'dva';
 import { Reducer } from 'redux';
 
-import { queryCurrent, query as queryUsers, queryCurrentMenu } from '@/services/user';
+import { query as queryUsers, queryCurrent, queryCurrentMenu } from '@/services/user';
 import { setAuthority } from '@/utils/authority';
 import { MenuDataItem } from '@ant-design/pro-layout';
 
@@ -65,7 +65,6 @@ const UserModel: UserModelType = {
     },
     *fetchCurrentMenu(_, { call, put }) {
       const response = yield call(queryCurrentMenu);
-      console.log('获取到了当前用户的目录：', response);
       yield put({
         type: 'saveCurrentMenu',
         payload: response,

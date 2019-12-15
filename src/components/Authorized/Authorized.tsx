@@ -18,8 +18,7 @@ type IAuthorizedType = React.FunctionComponent<AuthorizedProps> & {
 const Authorized: React.FunctionComponent<AuthorizedProps> = ({
   children,
   authority,
-  // noMatch = null,
-  noMatch,
+  noMatch = null,
 }) => {
   const childrenRender: React.ReactNode = typeof children === 'undefined' ? null : children;
   const dom = check(authority, childrenRender, noMatch);

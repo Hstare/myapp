@@ -10,7 +10,8 @@ import { getPageQuery } from '@/utils/utils';
 export interface StateType {
   status?: 'ok' | 'error';
   type?: string;
-  currentAuthority?: 'user' | 'guest' | 'admin';
+  // currentAuthority?: 'user' | 'guest' | 'admin';
+  currentAuthority?: string;
 }
 
 export interface LoginModelType {
@@ -45,7 +46,6 @@ const Model: LoginModelType = {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
-        console.log('redirect', redirect);
         if (redirect) {
           const redirectUrlParams = new URL(redirect);
           if (redirectUrlParams.origin === urlParams.origin) {
@@ -53,9 +53,6 @@ const Model: LoginModelType = {
             if (redirect.match(/^\/.*#/)) {
               redirect = redirect.substr(redirect.indexOf('#') + 1);
             }
-          } else {
-            window.location.href = redirect;
-            return;
           }
         } else {
           window.location.href = urlParams.origin;
@@ -69,6 +66,7 @@ const Model: LoginModelType = {
     },
     *logout(_, { put }) {
       const { redirect } = getPageQuery();
+      setAuthority('');
       // redirect
       if (window.location.pathname !== '/user/login' && !redirect) {
         yield put(
