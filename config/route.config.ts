@@ -1,4 +1,5 @@
 export default [
+  // user
   {
     path: '/user',
     component: '../layouts/UserLayout',
@@ -17,6 +18,29 @@ export default [
       },
     ],
   },
+  // exception
+  {
+    path: '/exception',
+    component: '../layouts/BlankLayout',
+    routes: [
+      {
+        path: '/exception/403',
+        name: 'not-permission',
+        component: './exception/403',
+      },
+      {
+        path: '/exception/404',
+        name: 'not-find',
+        component: './exception/404',
+      },
+      /*{
+        path: '/exception/500',
+        name: 'server-error',
+        component: './exception/500',
+      },*/
+    ],
+  },
+  // app
   {
     path: '/',
     component: '../layouts/SecurityLayout',
@@ -65,6 +89,9 @@ export default [
                 authority: ['user'],
                 component: './dashboard/Monitor',
               },
+              {
+                component: './404',
+              },
             ],
           },
           {
@@ -75,28 +102,6 @@ export default [
       {
         component: './404',
       },
-    ],
-  },
-  // exception
-  {
-    path: '/exception',
-    component: '../layouts/BlankLayout',
-    routes: [
-      {
-        path: '/exception/403',
-        name: 'not-permission',
-        component: './exception/403',
-      },
-      {
-        path: '/exception/404',
-        name: 'not-find',
-        component: './exception/404',
-      },
-      /*{
-        path: '/exception/500',
-        name: 'server-error',
-        component: './Exception/500',
-      },*/
     ],
   },
   {

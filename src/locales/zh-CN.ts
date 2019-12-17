@@ -4,6 +4,7 @@ import menu from './zh-CN/menu';
 import pwa from './zh-CN/pwa';
 import settingDrawer from './zh-CN/settingDrawer';
 import settings from './zh-CN/settings';
+import exception from '@/pages/exception/locals/zh-CN';
 import analysis from '../pages/dashboard/Analysis/locals/zh-CN';
 
 export default {
@@ -21,4 +22,5 @@ export default {
   ...pwa,
   ...component,
   ...analysis,
+  ...exception,
 };

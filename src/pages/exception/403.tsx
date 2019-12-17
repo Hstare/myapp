@@ -1,6 +1,7 @@
 import { Button, Result } from 'antd';
 import React from 'react';
 import router from 'umi/router';
+import { FormattedMessage } from 'umi-plugin-react/locale';
 
 // 这里应该使用 antd 的 403 result 组件，
 // 但是还没发布，先来个简单的。
@@ -10,10 +11,10 @@ const NoAuthorityPage: React.FC<{}> = () => (
     <Result
       status="403"
       title="403"
-      subTitle="抱歉，你无权访问该页面。"
+      subTitle={<FormattedMessage id="exception.403" defaultMessage="Sorry, you don't have access to this page."/>}
       extra={
         <Button type="primary" onClick={() => router.push('/')}>
-          Back Home
+          <FormattedMessage id="exception.back-home" defaultMessage="Back Home"/>
         </Button>
       }
     ></Result>

@@ -3,7 +3,6 @@ import React, { useRef } from 'react';
 
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import { connect } from 'dva';
-import { isAntDesignPro } from '@/utils/utils';
 import styles from './index.less';
 
 const firstUpperCase = (pathString: string): string =>
@@ -14,22 +13,6 @@ const firstUpperCase = (pathString: string): string =>
     .filter((s): boolean => !!s)
     .join('');
 
-// when  click block copy, send block url to  ga
-const onBlockCopy = (label: string) => {
-  if (!isAntDesignPro()) {
-    return;
-  }
-
-  const ga = window && window.ga;
-  if (ga) {
-    ga('send', 'event', {
-      eventCategory: 'block',
-      eventAction: 'copy',
-      eventLabel: label,
-    });
-  }
-};
-
 const BlockCodeView: React.SFC<{
   url: string;
 }> = ({ url }) => {
@@ -39,7 +22,7 @@ const BlockCodeView: React.SFC<{
       <Typography.Paragraph
         copyable={{
           text: blockUrl,
-          onCopy: () => onBlockCopy(url),
+          // onCopy: () => onBlockCopy(url),
         }}
         style={{
           display: 'flex',

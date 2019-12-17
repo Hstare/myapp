@@ -4,6 +4,7 @@ import menu from './en-US/menu';
 import pwa from './en-US/pwa';
 import settingDrawer from './en-US/settingDrawer';
 import settings from './en-US/settings';
+import exception from '@/pages/exception/locals/en-US';
 import analysis from '../pages/dashboard/Analysis/locals/en-US';
 
 export default {
@@ -21,4 +22,5 @@ export default {
   ...pwa,
   ...component,
   ...analysis,
+  ...exception,
 };
