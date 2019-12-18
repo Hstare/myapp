@@ -24,14 +24,15 @@ const checkPermissions = <T, K>(
   target: T,
   Exception: K,
 ): T | K | React.ReactNode => {
-  // 没有判定权限.默认查看所有
+  // 没有判定权限.默认查看所有(没有指定权限，则直接展现页面)
   // Retirement authority, return target;
-  /* if (!authority) {
+   if (!authority) {
     return target;
-  } */
-  if (!authority) {
-    return Exception;
   }
+   // 完全匹配
+  /* if (!authority) {
+    return Exception;
+  } */
   // 数组处理
   if (Array.isArray(authority)) {
     if (Array.isArray(currentAuthority)) {

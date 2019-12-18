@@ -59,7 +59,7 @@ export default [
             path: '/welcome',
             name: 'welcome',
             icon: 'smile',
-            authority: ['admin', 'user'],
+            // authority: ['admin', 'user'],
             component: './Welcome',
           },
           {
@@ -73,7 +73,7 @@ export default [
             path: '/dashboard',
             name: 'dashboard',
             icon: 'dashboard',
-            authority: ['admin', 'user'],
+            // authority: ['admin', 'user'],
             routes: [
               {
                 path: '/dashboard/analysis',
@@ -86,7 +86,7 @@ export default [
                 path: '/dashboard/monitor',
                 name: 'monitor',
                 icon: 'smile',
-                authority: ['user'],
+                // authority: ['user'],
                 component: './dashboard/Monitor',
               },
               {
