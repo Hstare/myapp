@@ -53,6 +53,7 @@
     "bizcharts-plugin-slider": "^2.1.1-beta.1",
     "classnames": "^2.2.6",
     "dva": "^2.4.1",
+    "eslint-plugin-react-hooks": "^2.3.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "numeral": "^2.0.6",

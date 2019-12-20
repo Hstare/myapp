@@ -8,6 +8,7 @@ import Avatar from './AvatarDropdown';
 import HeaderSearch from '../HeaderSearch';
 import SelectLang from '../SelectLang';
 import styles from './index.less';
+import NoticeIconView from './NoticeIconView';
 
 export type SiderTheme = 'light' | 'dark';
 export interface GlobalHeaderRightProps extends ConnectProps {
@@ -15,7 +16,7 @@ export interface GlobalHeaderRightProps extends ConnectProps {
   layout: 'sidemenu' | 'topmenu';
 }
 
-const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
+const GlobalHeaderRight: React.FC<GlobalHeaderRightProps> = props => {
   const { theme, layout } = props;
   let className = styles.right;
 
@@ -62,7 +63,8 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
           <Icon type="question-circle-o" />
         </a>
       </Tooltip>
-      <Avatar />
+      <NoticeIconView/>
+      <Avatar menu/>
       <SelectLang className={styles.action} />
     </div>
   );

@@ -52,7 +52,7 @@ export default [
         routes: [
           {
             path: '/',
-            authority: ['admin', 'user'],
+            // authority: ['user'],
             redirect: '/welcome',
           },
           {
