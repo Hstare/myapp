@@ -5,6 +5,16 @@ import { query as queryUsers, queryCurrent, queryCurrentMenu } from '@/services/
 import { setAuthority } from '@/utils/authority';
 import { MenuDataItem } from '@ant-design/pro-layout';
 
+export interface EnvironmentInfo {
+  key: string;
+  label: string;
+}
+
+export interface Environment {
+  province: EnvironmentInfo,
+  city: EnvironmentInfo,
+}
+
 export interface CurrentUser {
   avatar?: string;
   name?: string;
@@ -17,6 +27,7 @@ export interface CurrentUser {
   }[];
   userid?: string;
   unreadCount?: number;
+  geographic?: Environment;
 }
 
 export interface UserModelState {

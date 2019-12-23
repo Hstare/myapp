@@ -95,6 +95,20 @@ export default [
             ],
           },
           {
+            path: '/account',
+            name: 'account',
+            icon: 'user',
+            routes: [
+              {
+                path: '/account/center',
+                name: 'center',
+                icon: 'smile',
+                authority: ['admin'],
+                component: './account/center',
+              },
+            ]
+          },
+          {
             component: './404',
           },
         ],
