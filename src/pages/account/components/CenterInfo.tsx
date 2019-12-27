@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
 import { Card, Icon, Avatar, Divider, Tag, Input } from 'antd';
 import { connect } from 'dva';
@@ -25,14 +25,6 @@ const CenterInfo: React.FC<ICenterInfoProps> = props => {
     }
   }, []);
 
-  const addTag = () => {
-    setInputVisible(true);
-  };
-
-  const handleInputChange = (e: any) => {
-    setInputValue(e.target.value);
-  };
-
   const handleInputConfirm = () => {
     // @ts-ignore
     setTags([...tags, {
@@ -42,7 +34,7 @@ const CenterInfo: React.FC<ICenterInfoProps> = props => {
     setInputValue('');
     setInputVisible(false);
   };
-  console.log('~~~~~~');
+
   return (<GridContent style={{ padding: '0 12px' }}>
     <Card>
       <div>
@@ -71,16 +63,16 @@ const CenterInfo: React.FC<ICenterInfoProps> = props => {
       <div>
         <div style={{ marginBottom: 12, color: 'rgba(0,0,0,.85)' }}>标签</div>
         <div>
-          {tags && tags.map(item => <Tag>{item.label}</Tag>)}
+          {tags && tags.map(item => <Tag style={{ marginBottom: 8 }}>{item.label}</Tag>)}
           {inputVisible && <Input
             type="text"
             size="small"
             style={{ width: 78 }}
             value={inputValue}
-            onChange={handleInputChange}
+            onChange={(e: BaseSyntheticEvent) => setInputValue(e.target.value)}
             onPressEnter={handleInputConfirm}
           />}
-          {!inputVisible && <Tag onClick={addTag} style={{ background: '#fff', borderStyle: 'dashed' }}>
+          {!inputVisible && <Tag onClick={() => setInputVisible(true)} style={{ background: '#fff', borderStyle: 'dashed', marginBottom: 8 }}>
             <Icon type="plus"/>
           </Tag>}
         </div>

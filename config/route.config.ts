@@ -18,6 +18,18 @@ export default [
       },
     ],
   },
+  // main
+  {
+    path: '/main',
+    component: '../layouts/BlankLayout',
+    routes: [
+      {
+        path: '/main/index',
+        name: 'menu.home',
+        component: './main',
+      }
+    ],
+  },
   // exception
   {
     path: '/exception',
