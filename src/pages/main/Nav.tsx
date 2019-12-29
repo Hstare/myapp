@@ -4,7 +4,7 @@ import img from '@/assets/main.png';
 import { GridContent } from '@ant-design/pro-layout';
 import { Menu } from 'antd';
 import { getChildrenToRender } from '@/pages/main/util/utils';
-import './style/nav.less';
+import style from './style/nav.less';
 
 const { Item, SubMenu } = Menu;
 

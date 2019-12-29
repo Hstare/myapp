@@ -2,6 +2,8 @@
 
 # dependencies
 **/node_modules
+*.css
+*.css.map
 # roadhog-api-doc ignore
 /src/utils/request-temp.js
 _roadhog-api-doc
