@@ -4,156 +4,53 @@ import img from '@/assets/main.png';
 import { GridContent } from '@ant-design/pro-layout';
 import { Menu } from 'antd';
 import { getChildrenToRender } from '@/pages/main/util/utils';
-import style from './style/nav.less';
+import './style/nav.less';
 
 const { Item, SubMenu } = Menu;
 
-const menu = {
-    className: 'header-menu',
-    children: [
-      {
-        name: 'item0',
-        className: 'header0-item',
-        children: {
-          href: '#',
-          children: [{ children: '导航一', name: 'text' }],
-        },
-        subItem: [
-          {
-            name: 'sub0',
-            className: 'item-sub',
-            children: {
-              className: 'item-sub-item',
-              children: [
-                {
-                  name: 'image0',
-                  className: 'item-image',
-                  children:
-                    'https://gw.alipayobjects.com/zos/rmsportal/ruHbkzzMKShUpDYMEmHM.svg',
-                },
-                {
-                  name: 'title',
-                  className: 'item-title',
-                  children: 'Ant Design',
-                },
-                {
-                  name: 'content',
-                  className: 'item-content',
-                  children: '企业级 UI 设计体系',
-                },
-              ],
-            },
-          },
-          {
-            name: 'sub1',
-            className: 'item-sub',
-            children: {
-              className: 'item-sub-item',
-              children: [
-                {
-                  name: 'image0',
-                  className: 'item-image',
-                  children:
-                    'https://gw.alipayobjects.com/zos/rmsportal/ruHbkzzMKShUpDYMEmHM.svg',
-                },
-                {
-                  name: 'title',
-                  className: 'item-title',
-                  children: 'Ant Design',
-                },
-                {
-                  name: 'content',
-                  className: 'item-content',
-                  children: '企业级 UI 设计体系',
-                },
-              ],
-            },
-          },
-        ],
-      },
-      {
-        name: 'item1',
-        className: 'header0-item',
-        children: {
-          href: '#',
-          children: [{ children: '导航二', name: 'text' }],
-        },
-      },
-      {
-        name: 'item2',
-        className: 'header0-item',
-        children: {
-          href: '#',
-          children: [{ children: '导航三', name: 'text' }],
-        },
-      },
-      {
-        name: 'item3',
-        className: 'header0-item',
-        children: {
-          href: '#',
-          children: [{ children: '导航四', name: 'text' }],
-        },
-      },
+interface MenuProps {
+  key: string;
+  title: string;
+  subMenu: MenuProps[];
+}
+
+const customMenu = [
+  {
+    key: 'item0',
+    title: '菜单一',
+    subMenu: [
+      { key: 'subItem0', title: '子菜单一' },
+      { key: 'subItem1', title: '子菜单二' },
     ],
-  };
+  },
+  { key: 'item1', title: '菜单二' },
+  { key: 'item2', title: '菜单三' },
+  { key: 'item3', title: '菜单四' },
+];
 
 interface NavProps {
-  isMobile: boolean
+  isMobile: boolean;
+  menu: MenuProps[];
 }
 
 const Nav: React.FC<NavProps> = props => {
-  const { isMobile } = props;
+  const { isMobile, menu } = props;
 
   const [phoneOpen, setPhoneOpen] = useState(false);
 
   const phoneClick = () => setPhoneOpen(!phoneOpen);
 
-  const navChildren = menu.children.map((item) => {
-    const { children: a, subItem, ...itemProps } = item;
-    if (subItem) {
-      return (
-        <SubMenu
-          key={item.name}
-          {...itemProps}
-          title={
-            <div
-              {...a}
-              className={`header-item-block${a.className}`.trim()}
-            >
-              {a.children.map(getChildrenToRender)}
-            </div>
-          }
-          popupClassName="header0-item-child"
-        >
-          {subItem.map(($item, ii) => {
-            const { children: childItem } = $item;
-            const child = childItem.href ? (
-              <a {...childItem}>
-                {childItem.children.map(getChildrenToRender)}
-              </a>
-            ) : (
-              <div {...childItem}>
-                {childItem.children.map(getChildrenToRender)}
-              </div>
-            );
-            return (
-              <Item key={$item.name || ii.toString()} {...$item}>
-                {child}
-              </Item>
-            );
-          })}
-        </SubMenu>
-      );
-    }
-    return (
-      <Item key={item.name} {...itemProps}>
-        <a {...a} className={`header-item-block ${a.className}`.trim()}>
-          {a.children.map(getChildrenToRender)}
-        </a>
-      </Item>
-    );
-  });
+  const renderMenu = (menus: MenuProps[]) =>
+    menus.map(item => {
+      if (item.subMenu) {
+        return (
+          <SubMenu key={item.key} title={item.title}>
+            {renderMenu(item.subMenu)}
+          </SubMenu>
+        );
+      }
+      return <Item key={item.key}>{item.title}</Item>;
+    });
 
   console.log('isMobile', isMobile);
   const [moment, setMoment] = useState(0);
@@ -162,24 +59,35 @@ const Nav: React.FC<NavProps> = props => {
     phoneOpen === false ? setMoment(300) : setMoment(0);
   });
   return (
-    <GridContent>
+    <GridContent style={{ background: '#001529' }}>
       <TweenOne
         component="header"
         animation={{ opacity: 0, type: 'from' }}
-        className="header home-page-wrapper"
+        style={{ padding: '0 24px', margin: 'auto', maxWidth: '1200px' }}
       >
-        <div
-          className={`home-page${phoneOpen ? ' open' : ''}`}
-        >
+        <div className={`home-page${phoneOpen ? ' open' : ''}`}>
           <TweenOne
             animation={{ x: -30, type: 'from', ease: 'easeOutQuad' }}
-            className="header-logo"
+            style={{
+              position: 'relative',
+              display: 'inline-block',
+              width: 150,
+              lineHeight: '64px',
+            }}
           >
             <img width="100%" src={img} alt="img" />
           </TweenOne>
           {isMobile && (
             <div
-              className="header-mobile-menu"
+              style={{
+                position: 'absolute',
+                top: 24,
+                right: 24,
+                zIndex: 100,
+                width: 16,
+                height: 14,
+                cursor: 'pointer',
+              }}
               onClick={() => phoneClick()}
             >
               <em />
@@ -188,36 +96,37 @@ const Nav: React.FC<NavProps> = props => {
             </div>
           )}
           <TweenOne
-            {...menu}
             animation={
               isMobile
                 ? {
-                  height: 0,
-                  duration: 300,
-                  onComplete: (e) => {
-                    if (phoneOpen) {
-                      e.target.style.height = 'auto';
-                    }
-                  },
-                  ease: 'easeInOutQuad',
-                }
+                    height: 0,
+                    duration: 300,
+                    onComplete: e => {
+                      if (phoneOpen) {
+                        e.target.style.height = 'auto';
+                      }
+                    },
+                    ease: 'easeInOutQuad',
+                  }
                 : []
             }
             moment={moment}
             reverse={!!phoneOpen}
+            style={{ display: 'inline-block', float: 'right' }}
           >
             <Menu
               mode={isMobile ? 'inline' : 'horizontal'}
               defaultSelectedKeys={['sub0']}
               theme="dark"
+              style={{ lineHeight: '64px' }}
             >
-              {navChildren}
+              {renderMenu(customMenu)}
             </Menu>
           </TweenOne>
         </div>
       </TweenOne>
     </GridContent>
-  )
+  );
 };
 
 export default Nav;
