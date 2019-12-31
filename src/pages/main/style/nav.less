@@ -1,8 +1,7 @@
 @import "custom";
 
-@header: header;
 
-.@{header} {
+.header {
   position: relative;
   top: 0;
   z-index: 1;
@@ -94,7 +93,7 @@
 }
 
 @media screen and (max-width: 767px) {
-  .@{header} {
+  .header {
     &-logo {
       z-index: 101;
     }
@@ -162,7 +161,7 @@
     & .open {
       height: auto;
 
-      .@{header}-mobile-menu {
+      .header-mobile-menu {
         em {
           &:nth-child(1) {
             transform: translateY(6px) rotate(45deg);
@@ -178,7 +177,7 @@
         }
       }
 
-      >.@{header}-menu {
+      >.header-menu {
         opacity: 1;
         pointer-events: auto;
       }
