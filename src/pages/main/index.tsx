@@ -4,6 +4,7 @@ import { GridContent } from '@ant-design/pro-layout';
 import { enquireScreen } from 'enquire-js';
 import Nav from '@/pages/main/Nav';
 import Banner from '@/pages/main/Banner';
+import VideoContent from '@/pages/main/VideoContent';
 
 // 主页
 const Main: React.FC<{}> = () => {
@@ -24,6 +25,9 @@ const Main: React.FC<{}> = () => {
         {/* eslint-disable-next-line jsx-a11y/alt-text */}
         <Banner />
       </div>
+      {/* 视频内容*/}
+      <VideoContent/>
+      <VideoContent/>
       {/* 总体介绍 */}
 
       {/* footer */}

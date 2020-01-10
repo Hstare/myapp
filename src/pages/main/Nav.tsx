@@ -3,7 +3,6 @@ import TweenOne from 'rc-tween-one';
 import img from '@/assets/main.png';
 import { GridContent } from '@ant-design/pro-layout';
 import { Menu } from 'antd';
-import { getChildrenToRender } from '@/pages/main/util/utils';
 import './style/nav.less';
 
 const { Item, SubMenu } = Menu;
@@ -11,7 +10,7 @@ const { Item, SubMenu } = Menu;
 interface MenuProps {
   key: string;
   title: string;
-  subMenu: MenuProps[];
+  subMenu?: MenuProps[];
 }
 
 const customMenu = [
@@ -30,11 +29,11 @@ const customMenu = [
 
 interface NavProps {
   isMobile: boolean;
-  menu: MenuProps[];
+  menu?: MenuProps[];
 }
 
 const Nav: React.FC<NavProps> = props => {
-  const { isMobile, menu } = props;
+  const { isMobile } = props;
 
   const [phoneOpen, setPhoneOpen] = useState(false);
 

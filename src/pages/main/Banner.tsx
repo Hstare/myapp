@@ -3,11 +3,11 @@ import { GridContent } from '@ant-design/pro-layout';
 import RcTweenOne from 'rc-tween-one';
 import bannerTitle from '@/assets/banner-title.png';
 import { Button, Icon } from 'antd';
-// import style from './style/banner.less'
+import './style/banner.less'
 
 const Banner: React.FC<{}> = () => {
   // @ts-ignore
-  // @ts-ignore
+  // console.log('styles', styles);
   return (
     <GridContent
       style={{
@@ -31,6 +31,7 @@ const Banner: React.FC<{}> = () => {
         }}
       >
         <div style={{ position: 'absolute', top: '20%', left: 0, right: 0 }}>
+          {/* eslint-disable-next-line jsx-a11y/alt-text */}
           <img src={bannerTitle} />
           <div style={{ paddingBottom: 20 }}>
             <span>这是一段话</span>
@@ -46,10 +47,9 @@ const Banner: React.FC<{}> = () => {
           <RcTweenOne
             animation={{ repeat: -1, y: -20, yoyo: true, duration: 1000 }}
             key="icon"
-            style={{ position: 'absolute', bottom: 20, left: '50%', color: '#bcbcbc' }}
-            component="div"
+            className="banner-icon"
           >
-            <Icon type="down" style={{ fontSize: 25, color: '#fff' }} />
+            <Icon type="down"/>
           </RcTweenOne>
         </div>
       </RcTweenOne>
