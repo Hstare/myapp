@@ -1,189 +1,193 @@
 @import "custom";
 
-.header {
-  position: relative;
-  top: 0;
-  z-index: 1;
-  width: 100%;
-  background: @template-nav-bg-color;
-  box-shadow: 0 5px 8px fade(#000, 15);
-
-  .home-page {
-    padding: 0 24px;
-  }
-
-  &-logo {
-    position: relative;
-    display: inline-block;
-    width: 150px;
-    line-height: 64px;
-    //line-height: 20px;
-
-    & img {
-      display: inline-block;
-      vertical-align: middle;
-    }
-
-    & a {
-      display: block;
-    }
-  }
-
-  &-menu {
-    float: right;
-
-    .ant-menu {
-      height: 64px;
-      line-height: 62px;
-
-      a {
-        display: block;
-      }
-    }
-  }
-
-  &-item {
-    &-block {
-      padding: 0 8px;
-
-      >* {
-        display: inline-block;
-      }
-    }
-  }
-
-  &-item,
-  &-item-child,
-  &-menu {
-
-    .ant-menu-sub .ant-menu-item,
-    .ant-menu-inline .ant-menu-item {
-      height: auto;
-      line-height: 1.5;
-    }
-
-    .item {
-      &-sub-item {
-        display: block;
-        padding: 8px 24px;
-      }
-
-      &-image {
-        position: relative;
-        z-index: 1;
-        float: left;
-        margin-top: 4px;
-        margin-right: 16px;
-      }
-
-      &-title {
-        margin-left: 46px;
-        color: #fff;
-        font-size: 14px;
-      }
-
-      &-content {
-        margin-left: 46px;
-        color: fade(#fff, 75);
-        font-size: 12px;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 767px) {
+:global {
   .header {
-    &-logo {
-      z-index: 101;
-    }
+    position: relative;
+    top: 0;
+    z-index: 1;
+    width: 100%;
+    background: @template-nav-bg-color;
+    box-shadow: 0 5px 8px fade(#000, 15);
 
-    &.home-page-wrapper .home-page {
+    .home-page {
       padding: 0 24px;
     }
 
-    &-menu {
+    &-logo {
       position: relative;
-      left: -24px;
-      float: inherit;
-      width: ~"calc(100% + 48px)";
-      height: auto;
-      opacity: 0;
-      //transition: opacity .3s @ease-in-out;
+      display: inline-block;
+      width: 150px;
+      line-height: 64px;
+      //line-height: 20px;
 
-      & li {
-        padding: 0 24px;
+      & img {
+        display: inline-block;
+        vertical-align: middle;
+      }
 
-        &.ant-menu-submenu {
-          padding: 0;
+      & a {
+        display: block;
+      }
+    }
+
+    &-menu {
+      float: right;
+
+      .ant-menu {
+        height: 64px;
+        line-height: 62px;
+
+        a {
+          display: block;
         }
       }
+    }
+
+    &-item {
+      &-block {
+        padding: 0 8px;
+
+        > * {
+          display: inline-block;
+        }
+      }
+    }
+
+    &-item,
+    &-item-child,
+    &-menu {
+
+      .ant-menu-sub .ant-menu-item,
+      .ant-menu-inline .ant-menu-item {
+        height: auto;
+        line-height: 1.5;
+      }
+
       .item {
         &-sub-item {
-          padding: 8px 0;
+          display: block;
+          padding: 8px 24px;
+        }
+
+        &-image {
+          position: relative;
+          z-index: 1;
+          float: left;
+          margin-top: 4px;
+          margin-right: 16px;
+        }
+
+        &-title {
+          margin-left: 46px;
+          color: #fff;
+          font-size: 14px;
+        }
+
+        &-content {
+          margin-left: 46px;
+          color: fade(#fff, 75);
+          font-size: 12px;
         }
       }
     }
+  }
 
-    &-mobile-menu {
-      position: absolute;
-      top: 24px;
-      right: 24px;
-      z-index: 100;
-      width: 16px;
-      height: 14px;
-      cursor: pointer;
-
-      em {
-        display: block;
-        width: 100%;
-        height: 2px;
-        margin-top: 4px;
-        background: #fff;
-        //transition: transform .3s @ease-in-out, opacity .3s @ease-in-out;
-        transition: transform .3s cubic-bezier(0.645, 0.045, 0.355, 1), opacity .3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  @media screen and (max-width: 767px) {
+    .header {
+      &-logo {
+        z-index: 101;
       }
 
-      :first-child {
-        margin-top: 0;
+      &.home-page-wrapper .home-page {
+        padding: 0 24px;
       }
-    }
 
-    .ant-menu {
-      height: auto;
-      overflow: hidden;
+      &-menu {
+        position: relative;
+        left: -24px;
+        float: inherit;
+        width: ~"calc(100% + 48px)";
+        height: auto;
+        opacity: 0;
+        //transition: opacity .3s @ease-in-out;
 
-      .ant-menu-item-selected {
-        border: none;
+        & li {
+          padding: 0 24px;
+
+          &.ant-menu-submenu {
+            padding: 0;
+          }
+        }
+
+        .item {
+          &-sub-item {
+            padding: 8px 0;
+          }
+        }
       }
-    }
 
-    & .open {
-      height: auto;
+      &-mobile-menu {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        z-index: 100;
+        width: 16px;
+        height: 14px;
+        cursor: pointer;
 
-      .header-mobile-menu {
         em {
-          &:nth-child(1) {
-            transform: translateY(6px) rotate(45deg);
-          }
+          display: block;
+          width: 100%;
+          height: 2px;
+          margin-top: 4px;
+          background: #fff;
+          transition: transform .3s @ease-in-out, opacity .3s @ease-in-out;
+          //transition: transform .3s cubic-bezier(0.645, 0.045, 0.355, 1), opacity .3s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
 
-          &:nth-child(2) {
-            opacity: 0;
-          }
-
-          &:nth-child(3) {
-            transform: translateY(-6px) rotate(-45deg);
-          }
+        :first-child {
+          margin-top: 0;
         }
       }
 
-      >.header-menu {
-        opacity: 1;
-        pointer-events: auto;
+      .ant-menu {
+        height: auto;
+        overflow: hidden;
+
+        .ant-menu-item-selected {
+          border: none;
+        }
       }
-    }
-    &-item-block {
-      height: 40px;
-      line-height: 40px;
+
+      &.open {
+        height: auto;
+
+        .header-mobile-menu {
+          em {
+            &:nth-child(1) {
+              transform: translateY(6px) rotate(45deg);
+            }
+
+            &:nth-child(2) {
+              opacity: 0;
+            }
+
+            &:nth-child(3) {
+              transform: translateY(-6px) rotate(-45deg);
+            }
+          }
+        }
+
+        > .header-menu {
+          opacity: 1;
+          pointer-events: auto;
+        }
+      }
+
+      &-item-block {
+        height: 40px;
+        line-height: 40px;
+      }
     }
   }
 }
