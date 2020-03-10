@@ -53,11 +53,11 @@ const Nav: React.FC<NavProps> = props => {
 
   console.log('isMobile', isMobile);
   return (
-    <GridContent style={{ background: '#001529' }}>
+    <GridContent>
       <TweenOne
         component="header"
         animation={{ opacity: 0, type: 'from' }}
-        style={{ padding: '0 24px', margin: 'auto', maxWidth: '1200px' }}
+        style={{ padding: '0 24px', margin: 'auto', maxWidth: '1200px', background: '#001529' }}
       >
         <div className={`header${phoneOpen ? ' open' : ''}`}>
           <TweenOne
@@ -69,30 +69,29 @@ const Nav: React.FC<NavProps> = props => {
               lineHeight: '64px',
             }}
           >
-            <img width="100%" src={img} alt="img"/>
+            <img width="100%" src={img} alt="img" />
           </TweenOne>
           {isMobile && (
-            <div className="header-mobile-menu"
-                 style={{
-                   position: 'absolute',
-                   top: 24,
-                   right: 24,
-                   zIndex: 100,
-                   width: 16,
-                   height: 14,
-                   cursor: 'pointer',
-                 }}
-                 onClick={() => phoneClick()}
+            <div
+              className="header-mobile-menu"
+              style={{
+                position: 'absolute',
+                top: 24,
+                right: 24,
+                zIndex: 100,
+                width: 16,
+                height: 14,
+                cursor: 'pointer',
+              }}
+              onClick={() => phoneClick()}
             >
-              <em/>
-              <em/>
-              <em/>
+              <em />
+              <em />
+              <em />
             </div>
           )}
-          { (!isMobile || (isMobile && phoneOpen)) ?
-            <div
-              style={!isMobile ? { display: 'inline-block', float: 'right' } : {}}
-            >
+          {!isMobile || (isMobile && phoneOpen) ? (
+            <div style={!isMobile ? { display: 'inline-block', float: 'right' } : {}}>
               <Menu
                 mode={isMobile ? 'inline' : 'horizontal'}
                 defaultSelectedKeys={['sub0']}
@@ -101,8 +100,10 @@ const Nav: React.FC<NavProps> = props => {
               >
                 {renderMenu(customMenu)}
               </Menu>
-            </div> : <span/>
-          }
+            </div>
+          ) : (
+            <span />
+          )}
         </div>
       </TweenOne>
     </GridContent>

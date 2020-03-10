@@ -21,13 +21,14 @@ export default [
   // main
   {
     path: '/main',
+    redirect: '/main/index',
     component: '../layouts/BlankLayout',
     routes: [
       {
         path: '/main/index',
         name: 'menu.home',
         component: './main',
-      }
+      },
     ],
   },
   // exception
@@ -118,7 +119,7 @@ export default [
                 authority: ['admin'],
                 component: './account/center',
               },
-            ]
+            ],
           },
           {
             component: './404',
@@ -133,4 +134,4 @@ export default [
   {
     component: './404',
   },
-]
+];

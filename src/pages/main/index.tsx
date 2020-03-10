@@ -27,12 +27,12 @@ const Main: React.FC<{}> = () => {
         <Banner />
       </div>
       {/* 视频内容 */}
-      <VideoContent/>
-      <VideoContent/>
+      <VideoContent />
+      <VideoContent />
       {/* 总体介绍 */}
 
       {/* footer */}
-      <Footer/>
+      <Footer />
     </GridContent>
   );
 };

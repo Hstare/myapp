@@ -18,12 +18,16 @@ const CenterDetails: React.FC<{}> = () => {
       tab: 'project',
     },
   ];
-  return (<GridContent style={{ padding: '0 12px' }}>
-    <Card tabList={tabListNoTitle}
-          activeTabKey={key}
-          onTabChange={tab => setKey(tab)}>
-    </Card>
-  </GridContent>)
+  return (
+    <GridContent>
+      <Card
+        tabList={tabListNoTitle}
+        activeTabKey={key}
+        onTabChange={tab => setKey(tab)}
+        style={{ padding: '0 12px' }}
+      ></Card>
+    </GridContent>
+  );
 };
 
 export default CenterDetails;
