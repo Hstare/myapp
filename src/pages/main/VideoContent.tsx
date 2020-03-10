@@ -5,8 +5,7 @@ import { Icon } from 'antd';
 import RcTweenOne from 'rc-tween-one';
 import RcQueueAnim from 'rc-queue-anim';
 
-const VideoContent: React.FC<{}> = () => {
-  return (
+const VideoContent: React.FC<{}> = () => (
     <GridContent>
       <div style={{ background: '#fafafa', maxHeight: 720, height: 600 }}>
         <RcScrollOverPack
@@ -50,6 +49,5 @@ const VideoContent: React.FC<{}> = () => {
       </div>
     </GridContent>
   );
-};
 
 export default VideoContent;

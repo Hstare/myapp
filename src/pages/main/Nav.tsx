@@ -51,7 +51,6 @@ const Nav: React.FC<NavProps> = props => {
       return <Item key={item.key}>{item.title}</Item>;
     });
 
-  console.log('isMobile', isMobile);
   return (
     <GridContent>
       <TweenOne

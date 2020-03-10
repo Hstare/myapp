@@ -5,9 +5,8 @@ import bannerTitle from '@/assets/banner-title.png';
 import { Button, Icon } from 'antd';
 import './style/banner.less';
 
-const Banner: React.FC<{}> = () => {
-  // console.log('styles', styles);
-  return (
+const Banner: React.FC<{}> = () =>
+   (
     <GridContent>
       <div
         style={{
@@ -56,6 +55,4 @@ const Banner: React.FC<{}> = () => {
       </div>
     </GridContent>
   );
-};
-
 export default Banner;
